@@ -95,7 +95,6 @@
      "this is the story of sportzbee... work in progress"]]])
 
 (defn home-page []
-
   (fn [][Carousel {:activeIndex 0 :direction "next"}
         [CarouselItem
           [:img {:width 600 :height 250 :alt "600x250" :src "/img/participate.jpeg"}]
@@ -123,24 +122,30 @@
   )
 (defn services []
   (fn []
-      [Grid
+      [Grid {:fluid true}
           [Row
-           [Col {:xs 1 :md 3 :sm 1}
+           [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Organize"] [:p "Manage events completely"]]
+                [:h3 "Organize"] [:p "Manage events completely"]
+                [:p [Button {:bsStyle "primary"}"More"]]]
 
-           [Col {:xs 1 :md 3 :sm 1}
+           [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Search"] [:p "Search events in your locality"]]
-           [Col {:xs 1 :md 3 :sm 1}
+                [:h3 "Search"] [:p "Search events in your locality"]
+                [:p [Button {:bsStyle "primary"}"More"]]]
+           [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Participate"] [:p "Participate and build portfolio"]]
-           [Col {:xs 1 :md 3 :sm 1}
+                [:h3 "Participate"] [:p "Participate and build portfolio"]
+                [:p [Button {:bsStyle "primary"}"More"]]]
+           [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Share"] [:p "Share scores and performance with your friends"]]
+                [:h3 "Share"] [:p "Share scores and performance with your friends"]
+                [:p [Button {:bsStyle "primary"}"More"]]]
                ]
      ]
+
  ))
+
 (defn home-page1 []
   [:div.container
    [:div.jumbotron
@@ -155,14 +160,15 @@
       [:div.col-md-12
        [:div {:dangerouslySetInnerHTML
               {:__html (md->html docs)}}]]])])
+
 (defn footer []
   [Grid
    [Row
-    [Col {:xs 6} [Row [:h3 "Sportzbee"]]
+    [Col {:xs 12 :md 6} [Row [:h3 "Sportzbee"]]
                  [Row [:p "is online social & digital sports platform for sports enthusiast to capture,
                        record and share sports events & matches happening all over the world."]]
                  [Row [:h4 "© 2014 SportzEvents Inc. All rights reserved."]]]
-    [Col {:xs 6} [Row [:h5 "Disclaimer"]]
+    [Col {:xs 12 :md 6} [Row [:h5 "Disclaimer"]]
                  [Row [:p "Please contact the organizer of the event that you want to participate or
                        attend. Sportzevents.com attempts to provide information about events and gathers
                        event information from publicly available sources. The information is subject to change.

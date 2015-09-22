@@ -126,14 +126,14 @@
       [Grid
           [Row
            [Col {:xs 4 :md 3}
-                [Thumbnail {:href "#" :alt "171x180" :src "/assets/thumbnail.png'"}]
+                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Organize"] [:p "You can add, modify events"]]
 
            [Col {:xs 4 :md 3}
-                [Thumbnail {:href "#" :alt "171x180" :src "/assets/thumbnail.png'"}]
+                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Search"] [:p "You can add, modify events"]]
            [Col {:xs 4 :md 3}
-                [Thumbnail {:href "#" :alt "171x180" :src "/assets/thumbnail.png'"}]
+                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Participate"] [:p "Participate and build portfolio"]]
                ]
      ]

@@ -125,17 +125,17 @@
   (fn []
       [Grid
           [Row
-           [Col {:xs 4 :md 3}
+           [Col {:xs 1 :md 3 :sm 1}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Organize"] [:p "Manage events completely"]]
 
-           [Col {:xs 4 :md 3}
+           [Col {:xs 1 :md 3 :sm 1}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Search"] [:p "Search events in your locality"]]
-           [Col {:xs 4 :md 3}
+           [Col {:xs 1 :md 3 :sm 1}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Participate"] [:p "Participate and build portfolio"]]
-           [Col {:xs 4 :md 3}
+           [Col {:xs 1 :md 3 :sm 1}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Share"] [:p "Share scores and performance with your friends"]]
                ]

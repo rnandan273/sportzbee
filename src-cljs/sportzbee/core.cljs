@@ -131,27 +131,27 @@
 
 (defn reactnavbar []
   (fn []
-    [Navbar {:class "navbar-material-blue" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
+    [Navbar {:class "navbar-material-blue-800" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
      [CollapsibleNav {:eventKey 0}
      [Nav {:navbar true :eventKey 0}
-      [NavItem {:class "navitem-material-blue" :eventKey 1 :href "#/"} "Home"]
+      [NavItem {:class "navitem-material-blue-800" :eventKey 1 :href "#/"} "Home"]
       [NavItem {:class "navitem-material-blue" :eventKey 2 :href "#/about"} "About Us"]
 
-      [DropdownButton {:class "dropdownbutton-material-blue" :eventKey 3 :title "Sport"}
-       [MenuItem {:class "menuitem-material-blue" :eventKey "1"} "Table Tennis"]
-       [MenuItem {:class "menuitem-material-blue" :eventKey "2"} "Chess"]
-       [MenuItem {:class "menuitem-material-blue" :eventKey "3"} "Badminton"]
-       [MenuItem {:class "menuitem-material-blue" :eventKey "4"} "Tennis"]
-       [MenuItem {:class "menuitem-material-blue" :eventKey "5"} "Cricket"]
-       [MenuItem {:class "menuitem-material-blue" :eventKey "6"} "Soccer"]]
+      [DropdownButton {:class "dropdownbutton-material-blue-800" :eventKey 3 :title "Sport"}
+       [MenuItem {:class "menuitem-material-blue-800" :eventKey "1"} "Table Tennis"]
+       [MenuItem {:class "menuitem-material-blue-800" :eventKey "2"} "Chess"]
+       [MenuItem {:class "menuitem-material-blue-800" :eventKey "3"} "Badminton"]
+       [MenuItem {:class "menuitem-material-blue-800" :eventKey "4"} "Tennis"]
+       [MenuItem {:class "menuitem-material-blue-800" :eventKey "5"} "Cricket"]
+       [MenuItem {:class "menuitem-material-blue-800" :eventKey "6"} "Soccer"]]
 
       [DropdownButton {:eventKey 4 :title "Manage Events"}
-       [MenuItem {:class "menuitem-material-blue":eventKey "1" :href "#/addevent"} "Add"]
-       [MenuItem {:class "menuitem-material-blue":eventKey "2" :href "#/myevents"} "My Events"]]]
+       [MenuItem {:class "menuitem-material-blue-800":eventKey "1" :href "#/addevent"} "Add"]
+       [MenuItem {:class "menuitem-material-blue-800":eventKey "2" :href "#/myevents"} "My Events"]]]
 
       [Nav {:navbar true :right true}
-        [NavItem {:class "navitem-material-blue" :eventKey 1 :href "#/login"} "Login"]
-        [NavItem {:class "navitem-material-blue" :eventKey 2 :href "#/register"} "Register"]]]]))
+        [NavItem {:class "navitem-material-blue-800" :eventKey 1 :href "#/login"} "Login"]
+        [NavItem {:class "navitem-material-blue-800" :eventKey 2 :href "#/register"} "Register"]]]]))
 
 (defn navbar []
   (let [collapsed? (atom true)]
@@ -208,26 +208,27 @@
             [:p "Nulla vitae elit libero, a pharetra augue mollis interdum"]]]
       ]
       ]
+     [:br][:br]
      [:div
       [Grid {:fluid true}
           [Row
            [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Organize"] [:p "Manage events completely"]
-                [:p [Button {:class "btn-material-blue" :bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
 
            [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Search"] [:p "Search events in your locality"]
-                [:p [Button {:class "btn-material-blue" :bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
            [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Participate"] [:p "Participate and build portfolio"]
-                [:p [Button {:class "btn-material-blue" :bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
            [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Share"] [:p "Share scores and performance with your friends"]
-                [:p [Button {:class "btn-material-blue" :bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
                ]
      ]]]
 
@@ -240,20 +241,22 @@
            [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Organize"] [:p "Manage events completely"]
-                [:p [Button {:class "btn-material-blue" :bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
 
            [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Search"] [:p "Search events in your locality"]
-                [:p [Button {:class "btn-material-blue" :bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
+
            [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Participate"] [:p "Participate and build portfolio"]
-                [:p [Button {:class "btn-material-blue" :bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
+
            [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Share"] [:p "Share scores and performance with your friends"]
-                [:p [Button {:class "btn-material-blue" :bsStyle "primary"}"More"]]]
+                [:h3 "Share"] [:p "Share scores with your friends"]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
                ]
      ]
 
@@ -299,10 +302,10 @@
                 :type "email" :bsSize "small" :label "Email Address" :placeholder "Enter email"}]
         [Row
          [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4 }
-          [ButtonInput {:class "btn-material-blue" :type "reset" :bsStyle "primary" :value "Reset"}]
+          [ButtonInput {:class "btn-material-blue-800" :type "reset" :bsStyle "primary" :value "Reset"}]
           ]
          [Col {:md 3 :xs 4 }
-          [ButtonInput {:class "btn-material-blue" :type "submit" :bsStyle "primary" :value "Login" :onClick #(user-login-click @login_doc)}]
+          [ButtonInput {:class "btn-material-blue-800" :type "submit" :bsStyle "primary" :value "Login" :onClick #(user-login-click @login_doc)}]
           ]
         ]]])))
 
@@ -365,9 +368,9 @@
                 :onChange #(swap! register_doc assoc-in [:email] (-> % .-target .-value))}]
         [Row
          [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4 }
-          [ButtonInput {:type "reset" :class "btn-material-blue" :bsStyle "primary" :value "Reset"}]]
+          [ButtonInput {:type "reset" :class "btn-material-blue-800" :bsStyle "primary" :value "Reset"}]]
          [Col {:md 3 :xs 4 }
-          [ButtonInput {:type "submit" :class "btn-material-blue" :bsStyle "primary" :value "Register" :onClick #(user-register-click @register_doc)}]]]
+          [ButtonInput {:type "submit" :class "btn-material-blue-800" :bsStyle "primary" :value "Register" :onClick #(user-register-click @register_doc)}]]]
        ]])))
 
 (defn register-event []
@@ -418,9 +421,9 @@
 
        [Row
         [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4 }
-          [ButtonInput {:type "reset" :class "btn-material-blue" :bsStyle "primary" :value "Reset"}]]
+          [ButtonInput {:type "reset" :class "btn-material-blue-800" :bsStyle "primary" :value "Reset"}]]
         [Col {:md 3 :xs 4 }
-          [ButtonInput {:type "submit" :class "btn-material-blue" :bsStyle "primary" :value "Register"
+          [ButtonInput {:type "submit" :class "btn-material-blue-800" :bsStyle "primary" :value "Register"
                         :onClick #(user-register-click @register_doc)}]]]]]
 
       )))

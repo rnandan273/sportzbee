@@ -434,11 +434,11 @@
 (defn footer []
   [Grid
    [Row
-    [Col {:xs 12 :md 6} [Row [:h3 "Sportzbee"]]
+    [Col {:mdOffset 1 :xsOffset 1 :xs 5 :md 5} [Row [:h3 "Sportzbee"]]
                  [Row [:p "is online social & digital sports platform for sports enthusiast to capture,
                        record and share sports events & matches happening all over the world."]]
                  [Row [:h4 "© 2014 SportzEvents Inc. All rights reserved."]]]
-    [Col {:xs 12 :md 6} [Row [:h5 "Disclaimer"]]
+    [Col {:xs 5 :md 5} [Row [:h5 "Disclaimer"]]
                  [Row [:p "Please contact the organizer of the event that you want to participate or
                        attend. Sportzevents.com attempts to provide information about events and gathers
                        event information from publicly available sources. The information is subject to change.

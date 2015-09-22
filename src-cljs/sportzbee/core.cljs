@@ -10,6 +10,27 @@
   (:import goog.History))
 
 (def Text (reagent/adapt-react-class js/ReactBootstrap.Text))
+(def Grid (reagent/adapt-react-class js/ReactBootstrap.Grid))
+(def Row (reagent/adapt-react-class js/ReactBootstrap.Row))
+(def Col (reagent/adapt-react-class js/ReactBootstrap.Col))
+(def Label (reagent/adapt-react-class js/ReactBootstrap.Label))
+(def ListGroup (reagent/adapt-react-class js/ReactBootstrap.ListGroup))
+(def ListGroupItem (reagent/adapt-react-class js/ReactBootstrap.ListGroupItem))
+(def Button (reagent/adapt-react-class js/ReactBootstrap.Button))
+(def Label (reagent/adapt-react-class js/ReactBootstrap.Label))
+(def Jumbotron (reagent/adapt-react-class js/ReactBootstrap.Jumbotron))
+(def Accordion (reagent/adapt-react-class js/ReactBootstrap.Accordion))
+(def Panel (reagent/adapt-react-class js/ReactBootstrap.Panel))
+(def Modal (reagent/adapt-react-class js/ReactBootstrap.Modal))
+(def Navbar (reagent/adapt-react-class js/ReactBootstrap.Navbar))
+(def Nav (reagent/adapt-react-class js/ReactBootstrap.Nav))
+(def NavItem (reagent/adapt-react-class js/ReactBootstrap.NavItem))
+(def DropdownButton (reagent/adapt-react-class js/ReactBootstrap.DropdownButton))
+(def MenuItem (reagent/adapt-react-class js/ReactBootstrap.MenuItem))
+(def Input (reagent/adapt-react-class js/ReactBootstrap.Input))
+(def ButtonInput (reagent/adapt-react-class js/ReactBootstrap.ButtonInput))
+(def Thumbnail (reagent/adapt-react-class js/ReactBootstrap.Thumbnail))
+(def CollapsibleNav (reagent/adapt-react-class js/ReactBootstrap.CollapsibleNav))
 
 
 (defn nav-link [uri title page collapsed?]
@@ -18,9 +39,30 @@
         :on-click #(reset! collapsed? true)}
     title]])
 (defn reactnavbar []
-  [:div.navbar.navbar-fixed-top
-   [:div.container]]
-  )
+  (fn []
+    [Navbar {:fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
+     [CollapsibleNav {:eventKey 0}
+     [Nav {:navbar true :eventKey 0}
+      [NavItem {:eventKey 1 :href "#/"} "Home"]
+      [NavItem {:eventKey 2 :href "#/about"} "About Us"]
+
+      [DropdownButton {:eventKey 3 :title "Sport"}
+       [MenuItem {:eventKey "1"} "Table Tennis"]
+       [MenuItem {:eventKey "2"} "Chess"]
+       [MenuItem {:eventKey "3"} "Badminton"]
+       [MenuItem {:eventKey "4"} "Tennis"]
+       [MenuItem {:eventKey "5"} "Cricket"]
+       [MenuItem {:eventKey "6"} "Soccer"]]
+      [DropdownButton {:eventKey 4 :title "Manage Events"}
+       [MenuItem {:eventKey "1" :href "#/addevent"} "Add"]
+       [MenuItem {:eventKey "2" :href "#/myevents"} "My Events"]]
+      ]
+      [Nav {:navbar true :right true}
+      [NavItem {:eventKey 1 :href "#/login"} "Login"]
+      [NavItem {:eventKey 2 :href "#/register"} "Register"]
+      ]]
+
+      ]))
 (defn navbar []
   (let [collapsed? (atom true)]
     (fn []
@@ -99,7 +141,7 @@
   (GET (str js/context "/docs") {:handler #(session/put! :docs %)}))
 
 (defn mount-components []
-  (reagent/render [#'navbar] (.getElementById js/document "navbar"))
+  ;;(reagent/render [#'navbar] (.getElementById js/document "navbar"))
   (reagent/render [#'reactnavbar] (.getElementById js/document "reactnavbar"))
   (reagent/render [#'page] (.getElementById js/document "app")))
 

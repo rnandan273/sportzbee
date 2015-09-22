@@ -31,6 +31,8 @@
 (def ButtonInput (reagent/adapt-react-class js/ReactBootstrap.ButtonInput))
 (def Thumbnail (reagent/adapt-react-class js/ReactBootstrap.Thumbnail))
 (def CollapsibleNav (reagent/adapt-react-class js/ReactBootstrap.CollapsibleNav))
+(def Carousel (reagent/adapt-react-class js/ReactBootstrap.Carousel))
+(def CarouselItem (reagent/adapt-react-class js/ReactBootstrap.CarouselItem))
 
 
 (defn nav-link [uri title page collapsed?]
@@ -93,6 +95,50 @@
      "this is the story of sportzbee... work in progress"]]])
 
 (defn home-page []
+
+  (fn [][Carousel {:activeIndex 0 :direction "next"}
+        [CarouselItem
+          [:img {:width 600 :height 250 :alt "600x250" :src "/img/participate.jpeg"}]
+          [:div {:className "carousel-caption"}
+            [:h3 "Organize Tournaments and Manage them completely"]
+            [:p "Nulla vitae elit libero, a pharetra augue mollis interdum"]]]
+        [CarouselItem
+          [:img {:width 600 :height 250 :alt "600x250" :src "/img/list.jpeg"}]
+          [:div {:className "carousel-caption"}
+            [:h3 "Search and participate in your favourite Sport events"]
+            [:p "Nulla vitae elit libero, a pharetra augue mollis interdum"]]]
+        [CarouselItem
+          [:img {:width 600 :height 250 :alt "600x250" :src "/img/record.jpeg"}]
+          [:div {:className "carousel-caption"}
+            [:h3 "Record Scores and build portfolio, share with friends"]
+            [:p "Nulla vitae elit libero, a pharetra augue mollis interdum"]]]
+        [CarouselItem
+          [:img {:width 600 :height 250 :alt "600x250" :src "/img/capture.jpeg"}]
+          [:div {:className "carousel-caption"}
+            [:h3 "Share sport events with your friends"]
+            [:p "Nulla vitae elit libero, a pharetra augue mollis interdum"]]]
+      ]
+
+    )
+  )
+(defn services []
+  (fn []
+      [Grid
+          [Row
+           [Col {:xs 4 :md 3}
+                [Thumbnail {:href "#" :alt "171x180" :src "/assets/thumbnail.png'"}]
+                [:h3 "Organize"] [:p "You can add, modify events"]]
+
+           [Col {:xs 4 :md 3}
+                [Thumbnail {:href "#" :alt "171x180" :src "/assets/thumbnail.png'"}]
+                [:h3 "Search"] [:p "You can add, modify events"]]
+           [Col {:xs 4 :md 3}
+                [Thumbnail {:href "#" :alt "171x180" :src "/assets/thumbnail.png'"}]
+                [:h3 "Participate"] [:p "Participate and build portfolio"]]
+               ]
+     ]
+ ))
+(defn home-page1 []
   [:div.container
    [:div.jumbotron
     [:h1 "Welcome to sportzbee"]
@@ -106,7 +152,20 @@
       [:div.col-md-12
        [:div {:dangerouslySetInnerHTML
               {:__html (md->html docs)}}]]])])
-
+(defn footer []
+  [Grid
+   [Row
+    [Col {:xs 6} [Row [:h3 "Sportzbee"]]
+                 [Row [:p "is online social & digital sports platform for sports enthusiast to capture,
+                       record and share sports events & matches happening all over the world."]]
+                 [Row [:h4 "© 2014 SportzEvents Inc. All rights reserved."]]]
+    [Col {:xs 6} [Row [:h5 "Disclaimer"]]
+                 [Row [:p "Please contact the organizer of the event that you want to participate or
+                       attend. Sportzevents.com attempts to provide information about events and gathers
+                       event information from publicly available sources. The information is subject to change.
+                       Sportzevents.com does not take responsibility for any loss
+                       incurred due to plans made on the basis of the information on the Web site"]
+                  ]]]])
 (def pages
   {:home #'home-page
    :about #'about-page})
@@ -143,7 +202,9 @@
 (defn mount-components []
   ;;(reagent/render [#'navbar] (.getElementById js/document "navbar"))
   (reagent/render [#'reactnavbar] (.getElementById js/document "reactnavbar"))
-  (reagent/render [#'page] (.getElementById js/document "app")))
+  (reagent/render [#'page] (.getElementById js/document "app"))
+  (reagent/render [#'services] (.getElementById js/document "services"))
+  (reagent/render [#'footer] (.getElementById js/document "footer")))
 
 (defn init! []
   (fetch-docs!)

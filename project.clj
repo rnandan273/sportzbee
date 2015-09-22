@@ -21,9 +21,10 @@
                  [org.clojure/tools.nrepl "0.2.11"]
                  [org.webjars/bootstrap "3.3.5"]
                  [org.webjars/jquery "2.1.4"]
-                 [org.clojure/clojurescript "1.7.122" :scope "provided"]
+                 [org.clojure/clojurescript "1.7.107" :scope "provided"]
+                 [cljsjs/react-bootstrap "0.23.7-0" :exclusions [org.webjars.bower/jquery]]
                  [org.clojure/tools.reader "0.9.2"]
-                 [reagent "0.5.1"]
+                 [reagent "0.5.0" :exclusions [cljsjs/react]]
                  [reagent-forms "0.5.9"]
                  [reagent-utils "0.1.5"]
                  [secretary "1.2.3"]
@@ -67,7 +68,7 @@
                                  [ring/ring-devel "1.4.0"]
                                  [pjstadig/humane-test-output "0.7.0"]
                                  [lein-figwheel "0.4.0"]]
-                  :plugins [[lein-figwheel "0.4.0"]]
+                  :plugins [[lein-figwheel "0.4.0"] [hiccup-bridge "1.0.1"]]
                    :cljsbuild
                    {:builds
                     {:app

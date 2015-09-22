@@ -19,7 +19,12 @@
       </div>
     </div>
 
-    <!-- scripts and styles -->
+    {% style "/css/ripples.min.css" %}
+    {% style "/css/material.min.css" %}
+      {% style "/css/screen.css" %}
+      {% style "/bootstrap-3.3.5/css/bootstrap-theme.min.css" %}
+      {% style "/bootstrap-3.3.5/css/bootstrap.min.css" %}
+    <!-- scripts and styles
 
     {% style "/bootstrap-3.3.5/css/bootstrap.min.css" %}
     {% style "/css/ripples.min.css" %}
@@ -28,6 +33,7 @@
     {% style "/css/screen.css" %}
     {% style "/js/jquery.min.js" %}
     {% script "/bootstrap-3.3.5/js/bootstrap.min.js" %}
+      -->
 
     <script type="text/javascript">
         var context = "{{servlet-context}}";

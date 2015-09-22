@@ -4,9 +4,12 @@
             [secretary.core :as secretary :include-macros true]
             [goog.events :as events]
             [goog.history.EventType :as EventType]
+            [cljsjs.react-bootstrap :as react-bootstrap]
             [markdown.core :refer [md->html]]
             [ajax.core :refer [GET POST]])
   (:import goog.History))
+
+(def Text (reagent/adapt-react-class js/ReactBootstrap.Text))
 
 
 (defn nav-link [uri title page collapsed?]

@@ -42,26 +42,26 @@
     title]])
 (defn reactnavbar []
   (fn []
-    [Navbar {:fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
+    [Navbar {:class "navbar-material-blue" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
      [CollapsibleNav {:eventKey 0}
      [Nav {:navbar true :eventKey 0}
-      [NavItem {:eventKey 1 :href "#/"} "Home"]
-      [NavItem {:eventKey 2 :href "#/about"} "About Us"]
+      [NavItem {:class "navitem-material-blue" :eventKey 1 :href "#/"} "Home"]
+      [NavItem {:class "navitem-material-blue" :eventKey 2 :href "#/about"} "About Us"]
 
-      [DropdownButton {:eventKey 3 :title "Sport"}
-       [MenuItem {:eventKey "1"} "Table Tennis"]
-       [MenuItem {:eventKey "2"} "Chess"]
-       [MenuItem {:eventKey "3"} "Badminton"]
-       [MenuItem {:eventKey "4"} "Tennis"]
-       [MenuItem {:eventKey "5"} "Cricket"]
-       [MenuItem {:eventKey "6"} "Soccer"]]
+      [DropdownButton {:class "dropdownbutton-material-blue" :eventKey 3 :title "Sport"}
+       [MenuItem {:class "menuitem-material-blue" :eventKey "1"} "Table Tennis"]
+       [MenuItem {:class "menuitem-material-blue" :eventKey "2"} "Chess"]
+       [MenuItem {:class "menuitem-material-blue" :eventKey "3"} "Badminton"]
+       [MenuItem {:class "menuitem-material-blue" :eventKey "4"} "Tennis"]
+       [MenuItem {:class "menuitem-material-blue" :eventKey "5"} "Cricket"]
+       [MenuItem {:class "menuitem-material-blue" :eventKey "6"} "Soccer"]]
       [DropdownButton {:eventKey 4 :title "Manage Events"}
-       [MenuItem {:eventKey "1" :href "#/addevent"} "Add"]
-       [MenuItem {:eventKey "2" :href "#/myevents"} "My Events"]]
+       [MenuItem {:class "menuitem-material-blue":eventKey "1" :href "#/addevent"} "Add"]
+       [MenuItem {:class "menuitem-material-blue":eventKey "2" :href "#/myevents"} "My Events"]]
       ]
       [Nav {:navbar true :right true}
-      [NavItem {:eventKey 1 :href "#/login"} "Login"]
-      [NavItem {:eventKey 2 :href "#/register"} "Register"]
+      [NavItem {:class "navitem-material-blue" :eventKey 1 :href "#/login"} "Login"]
+      [NavItem {:class "navitem-material-blue" :eventKey 2 :href "#/register"} "Register"]
       ]]
 
       ]))
@@ -127,20 +127,20 @@
            [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Organize"] [:p "Manage events completely"]
-                [:p [Button {:bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue" :bsStyle "primary"}"More"]]]
 
            [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Search"] [:p "Search events in your locality"]
-                [:p [Button {:bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue" :bsStyle "primary"}"More"]]]
            [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Participate"] [:p "Participate and build portfolio"]
-                [:p [Button {:bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue" :bsStyle "primary"}"More"]]]
            [Col {:xs 12 :md 3 :sm 4}
                 [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
                 [:h3 "Share"] [:p "Share scores and performance with your friends"]
-                [:p [Button {:bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue" :bsStyle "primary"}"More"]]]
                ]
      ]
 

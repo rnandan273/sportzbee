@@ -101,7 +101,7 @@
           [:img {:width 600 :height 250 :alt "600x250" :src "/img/participate.jpeg"}]
           [:div {:className "carousel-caption"}
             [:h3 "Organize Tournaments and Manage them completely"]
-            [:p "Nulla vitae elit libero, a pharetra augue mollis interdum"]]]
+            [:p [:a.btn.btn-primary.btn-lg "Learn more »"]]]]
         [CarouselItem
           [:img {:width 600 :height 250 :alt "600x250" :src "/img/list.jpeg"}]
           [:div {:className "carousel-caption"}

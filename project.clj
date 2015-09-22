@@ -30,6 +30,7 @@
                  [secretary "1.2.3"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [cljs-ajax "0.3.14"]
+                 [hickory "0.5.4"]
                  [org.immutant/web "2.1.0"]]
 
   :min-lein-version "2.0.0"

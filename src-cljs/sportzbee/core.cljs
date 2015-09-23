@@ -14,7 +14,8 @@
   (:import goog.History)
   (:require-macros
     [cljs.core.async.macros :refer [go alt!]]))
-(def app-state (reagent/atom {:app-about-page-message "This about page message"
+(def app-state (reagent/atom
+                {:app-about-page-message "This about page message"
                               :background-color "black"
                               :person { :user-name "vijay_yes_retail"
                                        :bank ""
@@ -39,6 +40,52 @@
                                       :details ""}
                               :fbpage ""
                               :selected_detail ""
+                              :nav_items {
+                                   :items_main (list
+                                            {:link-ref "#/" :evt-key 1 :name-ref "Home"}
+                                            {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
+                                            {:link-ref "#/login" :evt-key 3 :name-ref "Login"})
+                                   :items_support (list
+                                            {:link-ref "#/login" :evt-key 1 :name-ref "Login"}
+                                            {:link-ref "#/register" :evt-key 2 :name-ref "Register"}
+                                            )}
+                              :carousel_items {
+                                  :items_carousel (list
+                                       {:link-ref "#/login" :src-ref "/img/participate.jpeg" :name-ref "Learn More >>"
+                                        :headline "Organize Tournaments and Manage them completely"}
+                                       {:link-ref "#/login" :src-ref "/img/list.jpeg" :name-ref "Search >>"
+                                        :headline "Search and participate in your favourite Sport events" }
+                                       {:link-ref "#/login" :src-ref "/img/record.jpeg" :name-ref "Participate >>"
+                                        :headline "Record Scores and build portfolio, share with friends" }
+                                       {:link-ref "#/login" :src-ref "/img/capture.jpeg" :name-ref "Share >>"
+                                        :headline "Share sport events with your friends" })}
+                              :services_items {
+                                  :items_services (list
+                                       {:click-param "events" :name-ref "Organize" :subtext "Manage events completely"
+                                        :button-href "#/details" :button-label "More"}
+                                       {:click-param "search" :name-ref "Search" :subtext "Search events in your locality"
+                                        :button-href "#/details" :button-label "More"}
+                                       {:click-param "participate" :name-ref "Participate" :subtext "Participate and build portfolio"
+                                        :button-href "#/details" :button-label "More"}
+                                       {:click-param "share" :name-ref "Share" :subtext "Share scores and performance with your friends"
+                                        :button-href "#/details" :button-label "More"})}
+                              :register_user_items {
+                                  :items_register (list
+                                      {:label "User Name" :placeholder "Enter user name" :type "text" :ref-key (list :user_name)}
+                                      {:label "Password" :placeholder "Enter password" :type "password" :ref-key (list :password)}
+                                      {:label "Password" :placeholder "Retype password" :type "password":ref-key (list :retype_password)}
+                                      {:label "Email" :placeholder "Enter email" :type "email" :ref-key (list :email)})}
+                              :register_event_items {
+                                  :items_register (list
+                                      {:label "Event Name" :placeholder "Enter event name" :ref-key (list :event_name)}
+                                      {:label "Venue Name" :placeholder "Enter venue name" :ref-key (list :venue_name)}
+                                      {:label "Street Name" :placeholder "Enter street name" :ref-key (list :street)}
+                                      {:label "Landmark" :placeholder "Enter landmark name" :ref-key (list :landmark)}
+                                      {:label "City" :placeholder "Enter city name" :ref-key (list :city)}
+                                      {:label "State" :placeholder "Enter state name" :ref-key (list :state)}
+                                      {:label "Pin" :placeholder "Enter pin" :ref-key (list :pin)}
+                                      {:label "Contact Info" :placeholder "Enter contact information" :ref-key (list :contact_info)}
+                                      {:label "Other Info" :placeholder "Enter other information" :ref-key (list :other_info)})}
                               }))
 
 
@@ -132,16 +179,6 @@
         :on-click #(reset! collapsed? true)}
     title]])
 
-(def nav_items
-  {:items_main (list
-                    {:link-ref "#/" :evt-key 1 :name-ref "Home"}
-                    {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
-                    {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
-                    )
-   :items_support (list
-                    {:link-ref "#/login" :evt-key 1 :name-ref "Login"}
-                    {:link-ref "#/register" :evt-key 2 :name-ref "Register"}
-                    )})
 
 (def menu_dropdown_items
   {:items_sports (list
@@ -162,7 +199,7 @@
     [Navbar {:class "navbar-material-blue-800" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
      [CollapsibleNav {:eventKey 0}
      [Nav {:navbar true :right true :eventKey 0}
-       (for [x (:items_main nav_items)]
+       (for [x (:items_main (@app_state :nav_items))]
           (let [{:keys [evt-key link-ref name-ref]} x]
             [NavItem {:class "navitem-material-blue-800" :eventKey evt-key :href link-ref} name-ref]))]]]))
 
@@ -219,35 +256,13 @@
     [:div.col-md-12
      "this is the story of sportzbee... work in progress"]]])
 
-(def carousel_items
-  {:items_carousel (list
-                     {:link-ref "#/login" :src-ref "/img/participate.jpeg" :name-ref "Learn More >>"
-                      :headline "Organize Tournaments and Manage them completely"}
-                     {:link-ref "#/login" :src-ref "/img/list.jpeg" :name-ref "Search >>"
-                      :headline "Search and participate in your favourite Sport events" }
-                     {:link-ref "#/login" :src-ref "/img/record.jpeg" :name-ref "Participate >>"
-                      :headline "Record Scores and build portfolio, share with friends" }
-                     {:link-ref "#/login" :src-ref "/img/capture.jpeg" :name-ref "Share >>"
-                      :headline "Share sport events with your friends" })})
-
-(def services_items
-  {:items_services (list
-                     {:click-param "events" :name-ref "Organize" :subtext "Manage events completely"
-                      :button-href "#/details" :button-label "More"}
-                     {:click-param "search" :name-ref "Search" :subtext "Search events in your locality"
-                      :button-href "#/details" :button-label "More"}
-                    {:click-param "participate" :name-ref "Participate" :subtext "Participate and build portfolio"
-                      :button-href "#/details" :button-label "More"}
-                    {:click-param "share" :name-ref "Share" :subtext "Share scores and performance with your friends"
-                      :button-href "#/details" :button-label "More"})})
-
 
 (defn home-page []
   (fn []
     [:div.container
      [:div [Carousel {:activeIndex 0 :direction "next"}
 
-        (for [x (:items_carousel carousel_items)]
+        (for [x (:items_carousel (@app_state :carousel_items))]
           (let [{:keys [src-ref link-ref name-ref :headline]} x]
             [CarouselItem
             [:img {:width 600 :height 250 :alt "600x250" :src src-ref}]
@@ -260,7 +275,7 @@
      [:div
       [Grid {:fluid true}
           [Row
-           (for [x (:items_services services_items)]
+           (for [x (:items_services (@app_state :services_items))]
              (let [{:keys [name-ref sub-text click-param button-label button-href name-ref]} x]
                [Col {:xs 12 :md 3 :sm 4}
                     [:h3 {:style {:font-weight "bold"}} name-ref] [:p sub-text]
@@ -347,21 +362,13 @@
      (read-auth-response (<! (do-http-post ((get url_list :user_register) username passwd rt_passwd email) doc))))))
 
 
-(def register_user_items
-  {:items_register (list
-                    {:label "User Name" :placeholder "Enter user name" :type "text" :ref-key (list :user_name)}
-                    {:label "Password" :placeholder "Enter password" :type "password" :ref-key (list :password)}
-                    {:label "Password" :placeholder "Retype password" :type "password":ref-key (list :retype_password)}
-                    {:label "Email" :placeholder "Enter email" :type "email" :ref-key (list :email)})
-   })
-
 (defn register-page []
   (let [register_doc (reagent/atom (@app-state :person) :many {:options :foo})]
     (fn []
       [:form  {:className "form-horizontal"}
        [Grid
         [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }[:h2 "Register New User"]]]
-        (for [x (:items_register register_user_items)]
+        (for [x (:items_register (@app_state :register_user_items))]
           (let [{:keys [label placeholder ref-key]} x]
               [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
                 :type (:type x) :bsSize "small" :label label :placeholder placeholder
@@ -373,26 +380,13 @@
           [ButtonInput {:type "submit" :class "btn-material-blue-800" :bsStyle "primary" :value "Register"
                         :onClick #(user-register-click @register_doc)}]]]]])))
 
-(def register_event_items
-  {:items_register (list
-                    {:label "Event Name" :placeholder "Enter event name" :ref-key (list :event_name)}
-                    {:label "Venue Name" :placeholder "Enter venue name" :ref-key (list :venue_name)}
-                    {:label "Street Name" :placeholder "Enter street name" :ref-key (list :street)}
-                    {:label "Landmark" :placeholder "Enter landmark name" :ref-key (list :landmark)}
-                    {:label "City" :placeholder "Enter city name" :ref-key (list :city)}
-                    {:label "State" :placeholder "Enter state name" :ref-key (list :state)}
-                    {:label "Pin" :placeholder "Enter pin" :ref-key (list :pin)}
-                    {:label "Contact Info" :placeholder "Enter contact information" :ref-key (list :contact_info)}
-                    {:label "Other Info" :placeholder "Enter other information" :ref-key (list :other_info)})
-   })
-
 (defn register-event []
   (let [event_doc (reagent/atom (@app-state :event))]
     (fn []
       [:form  {:className "form-horizontal"}
         [Grid
           [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }[:h2 "Register New Event"]]]
-            (for [x (:items_register register_event_items)]
+            (for [x (:items_register (@app_state :register_event_items))]
               (let [{:keys [label placeholder ref-key]} x]
               [Input {
                     :mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"

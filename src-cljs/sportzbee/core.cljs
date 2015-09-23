@@ -135,7 +135,7 @@
      [CollapsibleNav {:eventKey 0}
      [Nav {:navbar true :eventKey 0}
       [NavItem {:class "navitem-material-blue-800" :eventKey 1 :href "#/"} "Home"]
-      [NavItem {:class "navitem-material-blue" :eventKey 2 :href "#/about"} "About Us"]
+      [NavItem {:class "navitem-material-blue-800" :eventKey 2 :href "#/about"} "About Us"]
 
       [DropdownButton {:class "dropdownbutton-material-blue-800" :eventKey 3 :title "Sport"}
        [MenuItem {:class "menuitem-material-blue-800" :eventKey "1"} "Table Tennis"]

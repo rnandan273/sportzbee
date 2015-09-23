@@ -190,7 +190,7 @@
           [:img {:width 600 :height 250 :alt "600x250" :src "/img/participate.jpeg"}]
           [:div {:className "carousel-caption"}
             [:h3 "Organize Tournaments and Manage them completely"]
-            [:p [:a.btn.btn-primary.btn-lg "Learn more »"]]]]
+            [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"Learn More >>"]]]]
         [CarouselItem
           [:img {:width 600 :height 250 :alt "600x250" :src "/img/list.jpeg"}]
           [:div {:className "carousel-caption"}
@@ -213,21 +213,17 @@
       [Grid {:fluid true}
           [Row
            [Col {:xs 12 :md 3 :sm 4}
-                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Organize"] [:p "Manage events completely"]
+                [:h3 {:style {:font-weight "bold"}} "Organize"] [:p "Manage events completely"]
                 [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
 
            [Col {:xs 12 :md 3 :sm 4}
-                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Search"] [:p "Search events in your locality"]
+                [:h3 {:style {:font-weight "bold"}} "Search"] [:p "Search events in your locality"]
                 [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
            [Col {:xs 12 :md 3 :sm 4}
-                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Participate"] [:p "Participate and build portfolio"]
+                [:h3 {:style {:font-weight "bold"}} "Participate"] [:p "Participate and build portfolio"]
                 [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
            [Col {:xs 12 :md 3 :sm 4}
-                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Share"] [:p "Share scores and performance with your friends"]
+                [:h3 {:style {:font-weight "bold"}} "Share"] [:p "Share scores and performance with your friends"]
                 [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
                ]
      ]]]

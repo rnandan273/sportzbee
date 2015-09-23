@@ -38,6 +38,7 @@
                                       :end_date ""
                                       :details ""}
                               :fbpage ""
+                              :selected_detail ""
                               }))
 
 
@@ -65,6 +66,8 @@
 (def CollapsibleNav (reagent/adapt-react-class js/ReactBootstrap.CollapsibleNav))
 (def Carousel (reagent/adapt-react-class js/ReactBootstrap.Carousel))
 (def CarouselItem (reagent/adapt-react-class js/ReactBootstrap.CarouselItem))
+(def Tabs (reagent/adapt-react-class js/ReactBootstrap.Tabs))
+(def Tab (reagent/adapt-react-class js/ReactBootstrap.Tab))
 
 (defn log [s]
   (.log js/console (str s)))
@@ -129,7 +132,42 @@
         :on-click #(reset! collapsed? true)}
     title]])
 
+(def nav_items
+  {:items_main (list
+                    {:link-ref "#/" :evt-key 1 :name-ref "Home"}
+                    {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
+                    {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
+                    {:link-ref "#/register" :evt-key 4 :name-ref "Register"}
+                    )
+   :items_support (list
+                    {:link-ref "#/login" :evt-key 1 :name-ref "Login"}
+                    {:link-ref "#/register" :evt-key 2 :name-ref "Register"}
+                    )})
+
+(def menu_dropdown_items
+  {:items_sports (list
+                     {:event-key 1 :name-ref "Table-Tennis"}
+                     {:event-key 2 :name-ref "Chess"}
+                     {:event-key 3 :name-ref "Badmintom"}
+                     {:event-key 4 :name-ref "Tennis"}
+                     {:event-key 5 :name-ref "Cricket"}
+                     {:event-key 6 :name-ref "Soccer"})
+
+   :items_manage (list {:event-key 1 :name-ref "Add Event" :link-ref "#/addevent"}
+                     {:event-key 2 :name-ref "My Events" :link-ref "#/myevents"})
+   }
+)
+
 (defn reactnavbar []
+  (fn []
+    [Navbar {:class "navbar-material-blue-800" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
+     [CollapsibleNav {:eventKey 0}
+     [Nav {:navbar true :right true :eventKey 0}
+       (for [x (:items_main nav_items)]
+            [NavItem {:class "navitem-material-blue-800" :eventKey (:evt-key x) :href (:link-ref x)} (:name-ref x)])
+      ]]]))
+
+(defn reactnavbar1 []
   (fn []
     [Navbar {:class "navbar-material-blue-800" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
      [CollapsibleNav {:eventKey 0}
@@ -182,30 +220,30 @@
     [:div.col-md-12
      "this is the story of sportzbee... work in progress"]]])
 
+(def carousel_items
+  {:items_carousel (list
+                     {:link-ref "#/login" :src-ref "/img/participate.jpeg" :name-ref "Learn More >>"
+                      :headline "Organize Tournaments and Manage them completely"}
+                     {:link-ref "#/login" :src-ref "/img/list.jpeg" :name-ref "Search >>"
+                      :headline "Search and participate in your favourite Sport events" }
+                     {:link-ref "#/login" :src-ref "/img/record.jpeg" :name-ref "Participate >>"
+                      :headline "Record Scores and build portfolio, share with friends" }
+                     {:link-ref "#/login" :src-ref "/img/capture.jpeg" :name-ref "Share >>"
+                      :headline "Share sport events with your friends" })})
+
+
 (defn home-page []
   (fn []
     [:div.container
      [:div [Carousel {:activeIndex 0 :direction "next"}
-        [CarouselItem
-          [:img {:width 600 :height 250 :alt "600x250" :src "/img/participate.jpeg"}]
+
+        (for [x (:items_carousel nav_items)]
+          [CarouselItem
+          [:img {:width 600 :height 250 :alt "600x250" :src (:src-ref x)}]
           [:div {:className "carousel-caption"}
-            [:h3 "Organize Tournaments and Manage them completely"]
-            [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"Learn More >>"]]]]
-        [CarouselItem
-          [:img {:width 600 :height 250 :alt "600x250" :src "/img/list.jpeg"}]
-          [:div {:className "carousel-caption"}
-            [:h3 "Search and participate in your favourite Sport events"]
-            [:p "Nulla vitae elit libero, a pharetra augue mollis interdum"]]]
-        [CarouselItem
-          [:img {:width 600 :height 250 :alt "600x250" :src "/img/record.jpeg"}]
-          [:div {:className "carousel-caption"}
-            [:h3 "Record Scores and build portfolio, share with friends"]
-            [:p "Nulla vitae elit libero, a pharetra augue mollis interdum"]]]
-        [CarouselItem
-          [:img {:width 600 :height 250 :alt "600x250" :src "/img/capture.jpeg"}]
-          [:div {:className "carousel-caption"}
-            [:h3 "Share sport events with your friends"]
-            [:p "Nulla vitae elit libero, a pharetra augue mollis interdum"]]]
+            [:h3 (:headline x)]
+            [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href (:link-ref x)} (:name-ref x)]]]]
+          )
       ]
       ]
      [:br][:br]
@@ -214,22 +252,27 @@
           [Row
            [Col {:xs 12 :md 3 :sm 4}
                 [:h3 {:style {:font-weight "bold"}} "Organize"] [:p "Manage events completely"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/details" :onClick #(show-details "events")} "More"]]]
 
            [Col {:xs 12 :md 3 :sm 4}
                 [:h3 {:style {:font-weight "bold"}} "Search"] [:p "Search events in your locality"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/details" :onClick #(show-details "search")}"More"]]]
            [Col {:xs 12 :md 3 :sm 4}
                 [:h3 {:style {:font-weight "bold"}} "Participate"] [:p "Participate and build portfolio"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/details" :onClick #(show-details "participate")}"More"]]]
            [Col {:xs 12 :md 3 :sm 4}
                 [:h3 {:style {:font-weight "bold"}} "Share"] [:p "Share scores and performance with your friends"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/details" :onClick #(show-details "share")}"More"]]]
                ]
      ]]]
 
     )
   )
+
+(defn show-details [type]
+  (swap! app-state assoc-in [:selected_detail] type)
+  )
+
 (defn services []
   (fn []
       [Grid {:fluid true}
@@ -257,6 +300,43 @@
      ]
 
  ))
+
+(defn details-page []
+  (fn []
+     [:div [:h1 "Details for " (@app-state :selected_detail)]
+        [:div "content " (@app-state :selected_detail)]
+      ]
+     )
+)
+
+(defn details-page1 []
+  (fn []
+      [Grid {:fluid true}
+          [Row
+           [Col {:xs 12 :md 3 :sm 4}
+                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
+                [:h3 "Organize"] [:p "Manage events completely"]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
+
+           [Col {:xs 12 :md 3 :sm 4}
+                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
+                [:h3 "Search"] [:p "Search events in your locality"]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
+
+           [Col {:xs 12 :md 3 :sm 4}
+                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
+                [:h3 "Participate"] [:p "Participate and build portfolio"]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
+
+           [Col {:xs 12 :md 3 :sm 4}
+                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
+                [:h3 "Share"] [:p "Share scores with your friends"]
+                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
+               ]
+     ]
+
+ )
+  )
 
 (defn home-page1 []
   [:div.container
@@ -297,11 +377,14 @@
         [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
                 :type "email" :bsSize "small" :label "Email Address" :placeholder "Enter email"}]
         [Row
-         [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4 }
+         [Col {:mdOffset 2 :md 2 :xsOffset 2 :xs 2 }
           [ButtonInput {:class "btn-material-blue-800" :type "reset" :bsStyle "primary" :value "Reset"}]
           ]
-         [Col {:md 3 :xs 4 }
+         [Col {:md 2 :xs 2 }
           [ButtonInput {:class "btn-material-blue-800" :type "submit" :bsStyle "primary" :value "Login" :onClick #(user-login-click @login_doc)}]
+          ]
+         [Col {:md 2 :xs 2 }
+          [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/register"} "Register"]
           ]
         ]]])))
 
@@ -450,6 +533,7 @@
    :register #'register-page
    :addevent #'register-event
    :myevents #'my-events
+   :details #'details-page
    :login #'login-page
    :fblogin #'fblogin-page
    :about #'about-page})
@@ -475,6 +559,9 @@
 
 (secretary/defroute "/myevents" []
   (session/put! :page :myevents))
+
+(secretary/defroute "/details" []
+  (session/put! :page :details))
 
 (secretary/defroute "/chat" []
   (session/put! :page :chat))

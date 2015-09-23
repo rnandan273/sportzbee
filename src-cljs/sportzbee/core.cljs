@@ -137,7 +137,6 @@
                     {:link-ref "#/" :evt-key 1 :name-ref "Home"}
                     {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
                     {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
-                    {:link-ref "#/register" :evt-key 4 :name-ref "Register"}
                     )
    :items_support (list
                     {:link-ref "#/login" :evt-key 1 :name-ref "Login"}
@@ -164,8 +163,8 @@
      [CollapsibleNav {:eventKey 0}
      [Nav {:navbar true :right true :eventKey 0}
        (for [x (:items_main nav_items)]
-            [NavItem {:class "navitem-material-blue-800" :eventKey (:evt-key x) :href (:link-ref x)} (:name-ref x)])
-      ]]]))
+          (let [{:keys [evt-key link-ref name-ref]} x]
+            [NavItem {:class "navitem-material-blue-800" :eventKey evt-key :href link-ref} name-ref]))]]]))
 
 (defn reactnavbar1 []
   (fn []
@@ -231,127 +230,53 @@
                      {:link-ref "#/login" :src-ref "/img/capture.jpeg" :name-ref "Share >>"
                       :headline "Share sport events with your friends" })})
 
+(def services_items
+  {:items_services (list
+                     {:click-param "events" :name-ref "Organize" :subtext "Manage events completely"
+                      :button-href "#/details" :button-label "More"}
+                     {:click-param "search" :name-ref "Search" :subtext "Search events in your locality"
+                      :button-href "#/details" :button-label "More"}
+                    {:click-param "participate" :name-ref "Participate" :subtext "Participate and build portfolio"
+                      :button-href "#/details" :button-label "More"}
+                    {:click-param "share" :name-ref "Share" :subtext "Share scores and performance with your friends"
+                      :button-href "#/details" :button-label "More"})})
+
 
 (defn home-page []
   (fn []
     [:div.container
      [:div [Carousel {:activeIndex 0 :direction "next"}
 
-        (for [x (:items_carousel nav_items)]
-          [CarouselItem
-          [:img {:width 600 :height 250 :alt "600x250" :src (:src-ref x)}]
-          [:div {:className "carousel-caption"}
-            [:h3 (:headline x)]
-            [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href (:link-ref x)} (:name-ref x)]]]]
-          )
-      ]
-      ]
+        (for [x (:items_carousel carousel_items)]
+          (let [{:keys [src-ref link-ref name-ref :headline]} x]
+            [CarouselItem
+            [:img {:width 600 :height 250 :alt "600x250" :src src-ref}]
+            [:div {:className "carousel-caption"}
+              [:h3 headline]
+              [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href link-ref} name-ref]]]]))]]
+
      [:br][:br]
+
      [:div
       [Grid {:fluid true}
           [Row
-           [Col {:xs 12 :md 3 :sm 4}
-                [:h3 {:style {:font-weight "bold"}} "Organize"] [:p "Manage events completely"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/details" :onClick #(show-details "events")} "More"]]]
-
-           [Col {:xs 12 :md 3 :sm 4}
-                [:h3 {:style {:font-weight "bold"}} "Search"] [:p "Search events in your locality"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/details" :onClick #(show-details "search")}"More"]]]
-           [Col {:xs 12 :md 3 :sm 4}
-                [:h3 {:style {:font-weight "bold"}} "Participate"] [:p "Participate and build portfolio"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/details" :onClick #(show-details "participate")}"More"]]]
-           [Col {:xs 12 :md 3 :sm 4}
-                [:h3 {:style {:font-weight "bold"}} "Share"] [:p "Share scores and performance with your friends"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/details" :onClick #(show-details "share")}"More"]]]
-               ]
-     ]]]
-
-    )
-  )
+           (for [x (:items_services services_items)]
+             (let [{:keys [name-ref sub-text click-param button-label button-href name-ref]} x]
+               [Col {:xs 12 :md 3 :sm 4}
+                    [:h3 {:style {:font-weight "bold"}} name-ref] [:p sub-text]
+                    [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href button-href
+                                 :onClick #(show-details click-param)} button-label]]]))]]]]))
 
 (defn show-details [type]
   (swap! app-state assoc-in [:selected_detail] type)
   )
 
-(defn services []
-  (fn []
-      [Grid {:fluid true}
-          [Row
-           [Col {:xs 12 :md 3 :sm 4}
-                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Organize"] [:p "Manage events completely"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
-
-           [Col {:xs 12 :md 3 :sm 4}
-                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Search"] [:p "Search events in your locality"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
-
-           [Col {:xs 12 :md 3 :sm 4}
-                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Participate"] [:p "Participate and build portfolio"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
-
-           [Col {:xs 12 :md 3 :sm 4}
-                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Share"] [:p "Share scores with your friends"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
-               ]
-     ]
-
- ))
 
 (defn details-page []
   (fn []
      [:div [:h1 "Details for " (@app-state :selected_detail)]
-        [:div "content " (@app-state :selected_detail)]
-      ]
-     )
-)
+        [:div "content " (@app-state :selected_detail)]]))
 
-(defn details-page1 []
-  (fn []
-      [Grid {:fluid true}
-          [Row
-           [Col {:xs 12 :md 3 :sm 4}
-                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Organize"] [:p "Manage events completely"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
-
-           [Col {:xs 12 :md 3 :sm 4}
-                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Search"] [:p "Search events in your locality"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
-
-           [Col {:xs 12 :md 3 :sm 4}
-                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Participate"] [:p "Participate and build portfolio"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
-
-           [Col {:xs 12 :md 3 :sm 4}
-                [Thumbnail {:href "#" :alt "171x180" :src "/img/search.png"}]
-                [:h3 "Share"] [:p "Share scores with your friends"]
-                [:p [Button {:class "btn-material-blue-800" :bsStyle "primary"}"More"]]]
-               ]
-     ]
-
- )
-  )
-
-(defn home-page1 []
-  [:div.container
-   [:div.jumbotron
-    [:h1 "Welcome to sportzbee"]
-    [:p "Time to start building your site!"]
-    [:p [:a.btn.btn-primary.btn-lg {:href "http://luminusweb.net"} "Learn more »"]]]
-   [:div.row
-    [:div.col-md-12
-     [:h2 "Welcome to ClojureScript"]]]
-   (when-let [docs (session/get :docs)]
-     [:div.row
-      [:div.col-md-12
-       [:div {:dangerouslySetInnerHTML
-              {:__html (md->html docs)}}]]])])
 
 (defn my-events []
   [:div.container
@@ -384,9 +309,7 @@
           [ButtonInput {:class "btn-material-blue-800" :type "submit" :bsStyle "primary" :value "Login" :onClick #(user-login-click @login_doc)}]
           ]
          [Col {:md 2 :xs 2 }
-          [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/register"} "Register"]
-          ]
-        ]]])))
+          [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/register"} "Register"]]]]])))
 
 (def url_list {:usertoken1
                  (fn [username password]
@@ -424,33 +347,44 @@
      (read-auth-response (<! (do-http-post ((get url_list :user_register) username passwd rt_passwd email) doc))))))
 
 
+(def register_user_items
+  {:items_register (list
+                    {:label "User Name" :placeholder "Enter user name" :type "text" :ref-key (list :user_name)}
+                    {:label "Password" :placeholder "Enter password" :type "password" :ref-key (list :password)}
+                    {:label "Password" :placeholder "Retype password" :type "password":ref-key (list :retype_password)}
+                    {:label "Email" :placeholder "Enter email" :type "email" :ref-key (list :email)})
+   })
+
 (defn register-page []
   (let [register_doc (reagent/atom (@app-state :person) :many {:options :foo})]
     (fn []
       [:form  {:className "form-horizontal"}
        [Grid
         [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }[:h2 "Register New User"]]]
-        [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                :type "text" :bsSize "small" :label "Username" :placeholder "Enter text"
-                :onChange #(swap! register_doc assoc-in [:user_name] (-> % .-target .-value))}]
-
-        [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                :type "password" :bsSize "small" :label "Password" :placeholder "Enter password"
-                :onChange #(swap! register_doc assoc-in [:passwd] (-> % .-target .-value))}]
-
-        [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                :type "password" :bsSize "small" :label "Password" :placeholder "Retype password"
-                :onChange #(swap! register_doc assoc-in [:retype_passwd] (-> % .-target .-value))}]
-
-        [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                :type "email" :bsSize "small" :label "Email Address" :placeholder "Enter email"
-                :onChange #(swap! register_doc assoc-in [:email] (-> % .-target .-value))}]
+        (for [x (:items_register register_user_items)]
+          (let [{:keys [label placeholder ref-key]} x]
+              [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
+                :type (:type x) :bsSize "small" :label label :placeholder placeholder
+                :onChange #(swap! register_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
         [Row
          [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4 }
           [ButtonInput {:type "reset" :class "btn-material-blue-800" :bsStyle "primary" :value "Reset"}]]
          [Col {:md 3 :xs 4 }
-          [ButtonInput {:type "submit" :class "btn-material-blue-800" :bsStyle "primary" :value "Register" :onClick #(user-register-click @register_doc)}]]]
-       ]])))
+          [ButtonInput {:type "submit" :class "btn-material-blue-800" :bsStyle "primary" :value "Register"
+                        :onClick #(user-register-click @register_doc)}]]]]])))
+
+(def register_event_items
+  {:items_register (list
+                    {:label "Event Name" :placeholder "Enter event name" :ref-key (list :event_name)}
+                    {:label "Venue Name" :placeholder "Enter venue name" :ref-key (list :venue_name)}
+                    {:label "Street Name" :placeholder "Enter street name" :ref-key (list :street)}
+                    {:label "Landmark" :placeholder "Enter landmark name" :ref-key (list :landmark)}
+                    {:label "City" :placeholder "Enter city name" :ref-key (list :city)}
+                    {:label "State" :placeholder "Enter state name" :ref-key (list :state)}
+                    {:label "Pin" :placeholder "Enter pin" :ref-key (list :pin)}
+                    {:label "Contact Info" :placeholder "Enter contact information" :ref-key (list :contact_info)}
+                    {:label "Other Info" :placeholder "Enter other information" :ref-key (list :other_info)})
+   })
 
 (defn register-event []
   (let [event_doc (reagent/atom (@app-state :event))]
@@ -458,54 +392,19 @@
       [:form  {:className "form-horizontal"}
         [Grid
           [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }[:h2 "Register New Event"]]]
-          [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                  :type "text" :bsSize "small" :label "Event Name" :placeholder "Enter event name"
-                  :onChange #(swap! event_doc assoc-in [:event_name] (-> % .-target .-value))}]
+            (for [x (:items_register register_event_items)]
+              (let [{:keys [label placeholder ref-key]} x]
+              [Input {
+                    :mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
+                    :type "text" :bsSize "small" :label label :placeholder placeholder
+                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
 
-          [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                  :type "text" :bsSize "small" :label "Venue Name" :placeholder "Enter venue name"
-                  :onChange #(swap! event_doc assoc-in [:venue_name] (-> % .-target .-value))}]
-
-          [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                  :type "text" :bsSize "small" :label "Street Name":placeholder "Enter :street name"
-                  :onChange #(swap! event_doc assoc-in [:street] (-> % .-target .-value))}]
-
-           [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                 :type "text" :bsSize "small" :label "Landmark" :placeholder "Enter landmark name"
-                  :onChange #(swap! event_doc assoc-in [:landmark] (-> % .-target .-value))}]
-
-          [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                  :type "text" :bsSize "small" :label "City" :placeholder "Enter city"
-                  :onChange #(swap! event_doc assoc-in [:city] (-> % .-target .-value))}]
-
-          [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                  :type "text" :bsSize "small" :label "State" :placeholder "Enter state"
-                  :onChange #(swap! event_doc assoc-in [:state] (-> % .-target .-value))}]
-
-          [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                  :type "text" :bsSize "small" :label "PIN" :placeholder "Enter pin code"
-                  :onChange #(swap! event_doc assoc-in [:pin] (-> % .-target .-value))}]
-
-          [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                  :type "text" :bsSize "small" :label "Contact info" :placeholder "Enter contact into, cell, home or office"
-                  :onChange #(swap! event_doc assoc-in [:contact_info] (-> % .-target .-value))}]
-
-          [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                  :type "text" :bsSize "small" :label "Other info" :placeholder "Any other info"
-                  :onChange #(swap! event_doc assoc-in [:other_info] (-> % .-target .-value))}]
-
-          [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                  :type "textarea" :bsSize "small" :label "Details" :placeholder "Details"
-                  :onChange #(swap! event_doc assoc-in [:details] (-> % .-target .-value))}]
-
-       [Row
-        [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4 }
-          [ButtonInput {:type "reset" :class "btn-material-blue-800" :bsStyle "primary" :value "Reset"}]]
-        [Col {:md 3 :xs 4 }
-          [ButtonInput {:type "submit" :class "btn-material-blue-800" :bsStyle "primary" :value "Register"
-                        :onClick #(user-register-click @register_doc)}]]]]]
-
-      )))
+           [Row
+            [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4 }
+              [ButtonInput {:type "reset" :class "btn-material-blue-800" :bsStyle "primary" :value "Reset"}]]
+            [Col {:md 3 :xs 4 }
+              [ButtonInput {:type "submit" :class "btn-material-blue-800" :bsStyle "primary" :value "Register"
+                            :onClick #(user-register-click @register_doc)}]]]]])))
 
 (defn search_entry [entry]
   (log (str "Search : " entry)))
@@ -522,8 +421,7 @@
                        attend. Sportzevents.com attempts to provide information about events and gathers
                        event information from publicly available sources. The information is subject to change.
                        Sportzevents.com does not take responsibility for any loss
-                       incurred due to plans made on the basis of the information on the Web site"]
-                  ]]]])
+                       incurred due to plans made on the basis of the information on the Web site"]]]]])
 
 (defn fblogin-page []
   (@app-state :fbpage))

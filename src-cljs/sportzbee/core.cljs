@@ -276,9 +276,9 @@
       [Grid {:fluid true}
           [Row
            (for [x (:items_services (@app_state :services_items))]
-             (let [{:keys [name-ref sub-text click-param button-label button-href name-ref]} x]
+             (let [{:keys [name-ref subtext click-param button-label button-href name-ref]} x]
                [Col {:xs 12 :md 3 :sm 4}
-                    [:h3 {:style {:font-weight "bold"}} name-ref] [:p sub-text]
+                    [:h3 {:style {:font-weight "bold"}} name-ref] [:p subtext]
                     [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href button-href
                                  :onClick #(show-details click-param)} button-label]]]))]]]]))
 
@@ -340,7 +340,7 @@
 (defn user-login-click [{:keys [user-name passwd]} doc]
   (log (str "User Login destructuring" user-name passwd))
   (go
-    (read-auth-response (<! (do-http-get ((get url_list :usertoken) user-name passwd))))))
+    (read-auth-response (<! (do-http-get ((:usertoken url_list) user-name passwd))))))
 
 (defn user-fb-login-click []
 
@@ -359,7 +359,7 @@
   (def post_request (.stringify js/JSON (clj->js doc)))
     (log (str "POST REGISTER 1" doc))
   (go
-     (read-auth-response (<! (do-http-post ((get url_list :user_register) username passwd rt_passwd email) doc))))))
+     (read-auth-response (<! (do-http-post ((:user_register url_list) username passwd rt_passwd email) doc))))))
 
 
 (defn register-page []

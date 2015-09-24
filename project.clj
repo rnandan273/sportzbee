@@ -31,7 +31,9 @@
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [cljs-ajax "0.3.14"]
                  [hickory "0.5.4"]
-                 [org.immutant/web "2.1.0"]]
+                 [org.immutant/web "2.1.0"]
+                 [com.datomic/datomic-free "0.9.5153"  :exclusions [joda-time]]
+                 [org.clojure/core.logic "0.8.5"]]
 
   :min-lein-version "2.0.0"
   :uberjar-name "sportzbee.jar"
@@ -92,5 +94,6 @@
    :project/test {:env {:test       true
                         :port       3001
                         :nrepl-port 7001}}
+   :repositories {"my.datomic.com" {:url "https://my.datomic.com/repo" :creds :gpg}}
    :profiles/dev {}
    :profiles/test {}})

@@ -15,7 +15,7 @@
                  [ring "1.4.0"
                   :exclusions [ring/ring-jetty-adapter]]
                  [metosin/ring-middleware-format "0.6.0"]
-                 [metosin/ring-http-response "0.6.5"]
+                 [metosin/ring-http-response "0.6.3"]
                  [bouncer "0.3.3"]
                  [prone "0.8.2"]
                  [org.clojure/tools.nrepl "0.2.11"]
@@ -34,9 +34,10 @@
                  [http-kit "2.1.19"]
                  [org.immutant/web "2.1.0"]
                  [com.cognitect/transit-cljs "0.8.205"]
-
+                 [org.clojure/core.memoize "0.5.6"]
                  [com.datomic/datomic-free "0.9.5153"  :exclusions [joda-time]]
                  [org.clojure/core.logic "0.8.5"]
+                 [com.cemerick/friend "0.2.0"]
                  [org.clojure/data.json "0.2.6"]]
 
   :min-lein-version "2.0.0"

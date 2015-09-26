@@ -1,9 +1,10 @@
 (ns sportzbee.routes.home
   (:require [sportzbee.layout :as layout]
             [compojure.core :refer [defroutes GET POST]]
-            [sportzbee.datomic_queries :as dq]
-            [sportzbee.usergrid_queries :as ug]
-            [ring.util.http-response :refer [ok]]
+            [sportzbee.datomic_utils :as dq]
+            [sportzbee.usergrid_utils :as ug]
+            [sportzbee.oauth_utils :as oa]
+            [ring.util.http-response :refer [ok found]]
             [taoensso.timbre :as timbre]
             [clojure.java.io :as io]))
 
@@ -29,11 +30,12 @@
         (ok(ug/register_user req)))
 
   (GET "/syncfb" [] (timbre/info "In SYNC FB 123 :" )
-                   ;; (ok (oa/get_fb_url))
+                   (found(oa/get_fb_url))
        )
 
   (GET "/fb_callback" req
-       (timbre/info "In FB Callback :"))
+       (timbre/info "In FB Callback :" (:code (:params req)))
+       (oa/fb-handler req))
 
 
   (GET "/docs" [] (ok (-> "docs/docs.md" io/resource slurp))))

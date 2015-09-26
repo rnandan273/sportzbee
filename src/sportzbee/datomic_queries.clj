@@ -50,7 +50,7 @@
   (timbre/info (:bottom item) (:top item)))
 
 (defn show_styles [style_trend styles_list]
-
+  ;;loop through the sequence and add the styles to the datomic database
   (let [conn (d/connect uri)]
   (loop [list_x styles_list]
     (when (> (count list_x) 0)
@@ -109,5 +109,5 @@
 
 (defn dbquery []
   (let [conn (d/connect uri)]
-  (reng/find-all-styles conn)
-  (reng/find-all-products conn)))
+  (timbre/info (reng/find-all-styles conn))
+  (timbre/info (reng/find-all-products conn))))

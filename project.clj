@@ -32,8 +32,11 @@
                  [cljs-ajax "0.3.14"]
                  [hickory "0.5.4"]
                  [org.immutant/web "2.1.0"]
+                 [com.cognitect/transit-cljs "0.8.205"]
+
                  [com.datomic/datomic-free "0.9.5153"  :exclusions [joda-time]]
-                 [org.clojure/core.logic "0.8.5"]]
+                 [org.clojure/core.logic "0.8.5"]
+                 [org.clojure/data.json "0.2.6"]]
 
   :min-lein-version "2.0.0"
   :uberjar-name "sportzbee.jar"

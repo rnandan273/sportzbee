@@ -17,9 +17,10 @@
 (def app-state (reagent/atom
                 {:app-about-page-message "This about page message"
                               :background-color "black"
-                              :person { :user-name "vijay_yes_retail"
+                              :person { :user_name "vijay_yes_retail"
                                        :bank ""
-                                       :passwd "secret"
+                                       :password "secret"
+                                       :retype_password "secret"
                                        :age 35
                                        :token ""
                                        :action ""
@@ -116,6 +117,18 @@
 (def Tabs (reagent/adapt-react-class js/ReactBootstrap.Tabs))
 (def Tab (reagent/adapt-react-class js/ReactBootstrap.Tab))
 
+
+(def read-json (t/reader :json))
+
+(def write-json (t/writer :json))
+
+(defn forward-login [auth_response]
+  (log (str "ERROR ->" (get auth_response :error)))
+  (swap! app-state assoc-in [:person :action] (str "Invalid userid / password"))
+  (secretary/dispatch! "#/login")
+  (session/put! :page :login)
+  )
+
 (defn log [s]
   (.log js/console (str s)))
 
@@ -134,23 +147,14 @@
     ch))
 
 (defn do-http-post [url doc]
-  (log (str "POST " url doc))
+  (log "POSTING ---->")
+  (log (str "POST " url (clj->js doc)))
   (let [ch (chan 1)]
-    (POST url {:params doc :format :raw :handler (fn [response] (response-handler ch response))
+    (POST url {:params  (clj->js doc) :format :json :handler (fn [response] (response-handler ch response))
                :error-handler (fn [response] (response-handler ch response))})
     ch)
   )
 
-(def read-json (t/reader :json))
-
-(def write-json (t/writer :json-verbose))
-
-(defn forward-login [auth_response]
-  (log (str "ERROR ->" (get auth_response :error)))
-  (swap! app-state assoc-in [:person :action] (str "Invalid userid / password"))
-  (secretary/dispatch! "#/login")
-  (session/put! :page :login)
-  )
 
 (defn read-server-response [response]
   (walk/keywordize-keys (t/read read-json response)))
@@ -158,7 +162,7 @@
 (defn read-auth-response [response]
   (swap! app-state assoc-in [:fbpage] (first (map hickory/as-hiccup (hickory/parse-fragment response))))
 
-  (log (str "After Person appstate response "  (@app-state :fbpage)))
+  (log (str "After Person appstate response "  response))
   ;;(session/put! :page :fblogin)
   (let [auth_response (read-server-response response)]
     (cond (contains? auth_response :error)
@@ -167,9 +171,8 @@
     (cond (contains? auth_response :access_token)
           (
             (swap! app-state assoc-in [:person :token] (str (get auth_response :access_token)))
-            (swap! app-state assoc-in [:person :action] (str ""))
-            (secretary/dispatch! "/chat")
-            (session/put! :page :chat)
+            (secretary/dispatch! "/home")
+            (session/put! :page :home)
             )))
   )
 
@@ -355,7 +358,8 @@
   ))
 
 (defn user-register-click [doc]
-  (let [{:keys [user-name passwd rt_passwd email]} doc]
+   (log (str "POST REGISTER 1" doc))
+  (let [{:keys [user-name password retype_password email]} doc]
   (def post_request (.stringify js/JSON (clj->js doc)))
     (log (str "POST REGISTER 1" doc))
   (go
@@ -363,7 +367,7 @@
 
 
 (defn register-page []
-  (let [register_doc (reagent/atom (@app-state :person) :many {:options :foo})]
+  (let [register_doc (reagent/atom (@app-state :person))]
     (fn []
       [:form  {:className "form-horizontal"}
        [Grid
@@ -372,7 +376,7 @@
           (let [{:keys [label placeholder ref-key]} x]
               [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
                 :type (:type x) :bsSize "small" :label label :placeholder placeholder
-                :onChange #(swap! register_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
+                :onChange #(swap! register_doc assoc-in [(first ref-key)] (-> % .-target .-value))}]))
         [Row
          [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4 }
           [ButtonInput {:type "reset" :class "btn-material-blue-800" :bsStyle "primary" :value "Reset"}]]

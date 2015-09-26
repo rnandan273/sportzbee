@@ -1,8 +1,10 @@
 (ns sportzbee.routes.home
   (:require [sportzbee.layout :as layout]
-            [compojure.core :refer [defroutes GET]]
+            [compojure.core :refer [defroutes GET POST]]
             [sportzbee.datomic_queries :as dq]
+            [sportzbee.usergrid_queries :as ug]
             [ring.util.http-response :refer [ok]]
+            [taoensso.timbre :as timbre]
             [clojure.java.io :as io]))
 
 (defn home-page []
@@ -10,11 +12,29 @@
 
 (defroutes home-routes
   (GET "/" [] (home-page))
-  (GET "/dbsetup" [] (ok (dq/dbsetup)))
-  (GET "/dbshutdown" [] (ok (dq/dbshutdown)))
-  (GET "/dblist" [] (ok (dq/dblist)))
-  (GET "/dbload" [] (ok (dq/dbload)))
-  (GET "/dbseed" [] (ok (dq/dbseed)))
-  (GET "/dbquery" [] (ok (dq/dbquery)))
+
+  (GET "/dbcmd" req (cond (= (:op (:params req)) "setup") (ok (dq/dbsetup))
+                          (= (:op (:params req)) "list") (ok (dq/dblist))
+                          (= (:op (:params req)) "clean") (ok (dq/dbshutdown))
+                          (= (:op (:params req)) "load") (ok (dq/dbload))
+                          (= (:op (:params req)) "seed") (ok (dq/dbseed))
+                          (= (:op (:params req)) "query") (ok (dq/dbquery))))
+
+  (GET "/usertoken" req
+       (timbre/info "GET PARAMS1 " (:username (:params req)) (:password (:params req)) (:email (:params req)))
+       (ok (ug/get-user-token  (:grant_type (:params req)) (:username (:params req)) (:password (:params req))))
+       )
+
+  (POST "/register" req (println "Do something")
+        (ok(ug/register_user req)))
+
+  (GET "/syncfb" [] (timbre/info "In SYNC FB 123 :" )
+                   ;; (ok (oa/get_fb_url))
+       )
+
+  (GET "/fb_callback" req
+       (timbre/info "In FB Callback :"))
+
+
   (GET "/docs" [] (ok (-> "docs/docs.md" io/resource slurp))))
 

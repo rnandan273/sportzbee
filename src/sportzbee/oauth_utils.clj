@@ -8,6 +8,7 @@
             [clojure.data.json :as json]
             [org.httpkit.client :as http]
             [taoensso.timbre :as timbre]))
+
 ;;localhost
 (def APP_ID "116170012066426")
 (def APP_SECRET "22482ed438d84c5155990631f11a20f0")
@@ -17,7 +18,6 @@
 (def APP_ID "1632175487022964")
 (def APP_SECRET "7aa8251afc8926896569c679c4ec59f0")
 (def REDIRECT_URI "http://radiant-wave-8282.herokuapp.com/fb_callback")
-
 
 (def FB_ACCESS_TOKEN_URL "https://graph.facebook.com/oauth/access_token")
 
@@ -39,18 +39,24 @@
       (str/split #"&expires")
       (get 0))
 )
+
 (defn access_fb_data [body]
    (def fb_access_url (str "https://api.usergrid.com/catamera/yes_retail_ebanking_app/auth/facebook?fb_access_token=" (get_fb_access_token body)))
    (timbre/info "FB url->" fb_access_url)
    (let [{:keys [status headers body error] :as resp} @(http/get fb_access_url)]
      (if error
        (timbre/info  "Failed, exception: " error)
-       (json/write-str (json/read-str body :key-fn keyword)))))
+       (json/read-str body :key-fn keyword))))
 
 (defn send-redirect-resp [msg]
+  (timbre/info (:access_token msg))
+  (timbre/info (:name (:facebook (:user msg))))
+  ;;(def gen_token (str "access_token=" (:access_token msg) "user_name=" (:user (:facebook (:user msg))) ";Path=/"))
+  (def gen_token (str "token=" (:name (:facebook (:user msg))) ";Path=/"))
+
   {:status 302
-     :headers {"location" "/#/"
-               "set-cookie" (str "token=" "RAGHU" ";Path=/")}}
+   :headers {"location" "/#/"
+             "set-cookie"  gen_token}}
 )
 
 (defn fb-handler [req]
@@ -61,11 +67,14 @@
       (let [{:keys [status headers body error] :as resp} @(http/get fb_access_token_url)]
         (if error
           (timbre/info  "Failed, exception: " error)
-          (do
-          (access_fb_data body)
-          (send-redirect-resp (json/write-str {:name "xxx"}))
-           )
-
+          (send-redirect-resp (access_fb_data body))
           )
     )
+)
+
+(defn logout []
+  (def gen_token (str "token="  ";Path=/"))
+  {:status 302
+   :headers {"location" "/#/"
+             "set-cookie"  gen_token}}
 )

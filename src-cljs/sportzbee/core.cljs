@@ -46,7 +46,8 @@
                                    :items_main (list
                                             {:link-ref "#/" :evt-key 1 :name-ref "Home"}
                                             {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
-                                            {:link-ref "#/login" :evt-key 3 :name-ref "Login"})
+                                            {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
+                                            {:link-ref "/syncfb" :evt-key 4 :name-ref "LoginFB"})
                                    :items_support (list
                                             {:link-ref "#/login" :evt-key 1 :name-ref "Login"}
                                             {:link-ref "#/register" :evt-key 2 :name-ref "Register"}
@@ -261,9 +262,6 @@
     [:div.col-md-12
      "this is the story of sportzbee... work in progress"]]])
 
-(defn get-user []
-  (if (cookies/contains? "token")
-      (swap! app-state assoc-in [:person :user_name] (cookies/get "token"))))
 
 (defn home-page []
   (fn []
@@ -299,6 +297,11 @@
      [:div [:h1 "Details for " (@app-state :selected_detail)]
         [:div "content " (@app-state :selected_detail)]]))
 
+(defn logout-page []
+  [:div.container
+   [:div.row
+    [:div.col-md-12
+     "Your  logged out , Thanks for visiting"]]])
 
 (defn my-events []
   [:div.container
@@ -363,6 +366,17 @@
   (go
      (read-auth-response (<! (do-http-get usergrid_url))))
   ))
+
+(defn logout-click []
+  (cookies/remove! "token")
+  (do
+        (swap! app-state assoc-in [:person :user_name] "Guest")
+        (swap! app-state assoc-in [:nav_items :items_main]
+         (list {:link-ref "#/" :evt-key 1 :name-ref "Home"}
+               {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
+               {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
+               {:link-ref "/syncfb" :evt-key 3 :name-ref "LoginFB"})))
+)
 
 (defn user-register-click [doc]
    (log (str "POST REGISTER 1" doc))
@@ -475,6 +489,37 @@
 (secretary/defroute "/logout" []
   (session/put! :page :logout))
 
+(defn on_logout []
+  (cookies/remove! "token")
+  (do
+        (swap! app-state assoc-in [:person :user_name] "Guest")
+        (swap! app-state assoc-in [:nav_items :items_main]
+         (list {:link-ref "#/" :evt-key 1 :name-ref "Home"}
+               {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
+               {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
+               {:link-ref "/syncfb" :evt-key 3 :name-ref "LoginFB"})))
+  )
+
+(defn redirect_handle_page_load[]
+  (log "history event")
+  (log (cookies/get "token"))
+  (if (cookies/contains-key? "token")
+    (do
+        (swap! app-state assoc-in [:person :user_name] (cookies/get "token"))
+        (swap! app-state assoc-in [:nav_items :items_main]
+         (list {:link-ref "#/" :evt-key 1 :name-ref "Home"}
+               {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
+               {:link-ref "/logout" :evt-key 3 ::name-ref "Logout"})))
+    (do
+        (swap! app-state assoc-in [:person :user_name] "Guest")
+        (swap! app-state assoc-in [:nav_items :items_main]
+         (list {:link-ref "#/" :evt-key 1 :name-ref "Home"}
+               {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
+               {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
+               {:link-ref "/syncfb" :evt-key 4 :name-ref "LoginFB"}))))
+
+)
+
 ;; -------------------------
 ;; History
 ;; must be called after routes have been defined
@@ -483,9 +528,7 @@
         (events/listen
           EventType/NAVIGATE
           (fn [event]
-              (log "history event")
-              (log (cookies/get "token"))
-              (swap! app-state assoc-in [:person :user_name] (cookies/get "token"))
+              (redirect_handle_page_load)
               (secretary/dispatch! (.-token event))))
         (.setEnabled true)))
 
@@ -504,4 +547,6 @@
 (defn init! []
   (fetch-docs!)
   (hook-browser-navigation!)
-  (mount-components))
+  (mount-components)
+)
+

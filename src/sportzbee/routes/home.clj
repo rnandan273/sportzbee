@@ -23,19 +23,20 @@
 
   (GET "/usertoken" req
        (timbre/info "GET PARAMS1 " (:username (:params req)) (:password (:params req)) (:email (:params req)))
-       (ok (ug/get-user-token  (:grant_type (:params req)) (:username (:params req)) (:password (:params req))))
-       )
+       (ok (ug/get-user-token  (:grant_type (:params req)) (:username (:params req)) (:password (:params req)))))
 
   (POST "/register" req (println "Do something")
         (ok(ug/register_user req)))
 
   (GET "/syncfb" [] (timbre/info "In SYNC FB 123 :" )
-                   (found(oa/get_fb_url))
-       )
+        (found(oa/get_fb_url)))
 
   (GET "/fb_callback" req
        (timbre/info "In FB Callback :" (:code (:params req)))
        (oa/fb-handler req))
+
+  (GET "/logout" []
+       (oa/logout))
 
 
   (GET "/docs" [] (ok (-> "docs/docs.md" io/resource slurp))))

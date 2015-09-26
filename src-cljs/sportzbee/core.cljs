@@ -1,6 +1,7 @@
 (ns sportzbee.core
   (:require [reagent.core :as reagent :refer [atom]]
             [reagent.session :as session]
+            [reagent.cookies :as cookies]
             [secretary.core :as secretary :include-macros true]
             [goog.events :as events]
             [goog.history.EventType :as EventType]
@@ -17,7 +18,7 @@
 (def app-state (reagent/atom
                 {:app-about-page-message "This about page message"
                               :background-color "black"
-                              :person { :user_name "vijay_yes_retail"
+                              :person {:user_name "Guest"
                                        :bank ""
                                        :password "secret"
                                        :retype_password "secret"
@@ -202,6 +203,7 @@
     [Navbar {:class "navbar-material-blue-800" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
      [CollapsibleNav {:eventKey 0}
      [Nav {:navbar true :right true :eventKey 0}
+           [NavItem {:class "navitem-material-blue-800"} (str "Welcome " ((@app_state :person) :user_name))]
        (for [x (:items_main (@app_state :nav_items))]
           (let [{:keys [evt-key link-ref name-ref]} x]
             [NavItem {:class "navitem-material-blue-800" :eventKey evt-key :href link-ref} name-ref]))]]]))
@@ -259,12 +261,14 @@
     [:div.col-md-12
      "this is the story of sportzbee... work in progress"]]])
 
+(defn get-user []
+  (if (cookies/contains? "token")
+      (swap! app-state assoc-in [:person :user_name] (cookies/get "token"))))
 
 (defn home-page []
   (fn []
     [:div.container
      [:div [Carousel {:activeIndex 0 :direction "next"}
-
         (for [x (:items_carousel (@app_state :carousel_items))]
           (let [{:keys [src-ref link-ref name-ref :headline]} x]
             [CarouselItem
@@ -325,6 +329,9 @@
           ]
          [Col {:md 2 :xs 2 }
           [ButtonInput {:class "btn-material-blue-800" :type "submit" :bsStyle "primary" :value "Login" :onClick #(user-login-click @login_doc)}]
+          ]
+         [Col {:md 2 :xs 2}
+          [Button {:type "submit" :bsStyle "primary" :href "/syncfb" :onClick #(true)} "LoginFB"]
           ]
          [Col {:md 2 :xs 2 }
           [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/register"} "Register"]]]]])))
@@ -476,6 +483,9 @@
         (events/listen
           EventType/NAVIGATE
           (fn [event]
+              (log "history event")
+              (log (cookies/get "token"))
+              (swap! app-state assoc-in [:person :user_name] (cookies/get "token"))
               (secretary/dispatch! (.-token event))))
         (.setEnabled true)))
 

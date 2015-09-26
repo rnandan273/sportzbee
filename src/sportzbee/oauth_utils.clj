@@ -8,12 +8,16 @@
             [clojure.data.json :as json]
             [org.httpkit.client :as http]
             [taoensso.timbre :as timbre]))
-
+;;localhost
 (def APP_ID "116170012066426")
-
 (def APP_SECRET "22482ed438d84c5155990631f11a20f0")
-
 (def REDIRECT_URI "http://localhost:3000/fb_callback")
+
+;;heroku
+(def APP_ID "1632175487022964")
+(def APP_SECRET "7aa8251afc8926896569c679c4ec59f0")
+(def REDIRECT_URI "http://radiant-wave-8282.herokuapp.com/fb_callback")
+
 
 (def FB_ACCESS_TOKEN_URL "https://graph.facebook.com/oauth/access_token")
 

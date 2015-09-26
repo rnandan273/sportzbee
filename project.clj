@@ -31,6 +31,7 @@
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [cljs-ajax "0.3.14"]
                  [hickory "0.5.4"]
+                 [http-kit "2.1.19"]
                  [org.immutant/web "2.1.0"]
                  [com.cognitect/transit-cljs "0.8.205"]
 

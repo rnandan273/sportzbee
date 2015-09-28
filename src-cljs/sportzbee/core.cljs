@@ -203,37 +203,37 @@
 
 (defn reactnavbar []
   (fn []
-    [Navbar {:class "navbar-material-blue-800" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
+    [Navbar {:class "navbar-material-light-blue-800" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
      [CollapsibleNav {:eventKey 0}
      [Nav {:navbar true :right true :eventKey 0}
-           [NavItem {:class "navitem-material-blue-800"} (str "Welcome " ((@app_state :person) :user_name))]
+           [NavItem {:class "navitem-material-light-blue-800"} (str "Welcome " ((@app_state :person) :user_name))]
        (for [x (:items_main (@app_state :nav_items))]
           (let [{:keys [evt-key link-ref name-ref]} x]
-            [NavItem {:class "navitem-material-blue-800" :eventKey evt-key :href link-ref} name-ref]))]]]))
+            [NavItem {:class "navitem-material-light-blue-800" :eventKey evt-key :href link-ref} name-ref]))]]]))
 
 (defn reactnavbar1 []
   (fn []
-    [Navbar {:class "navbar-material-blue-800" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
+    [Navbar {:class "navbar-material-light-blue-800" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
      [CollapsibleNav {:eventKey 0}
      [Nav {:navbar true :eventKey 0}
-      [NavItem {:class "navitem-material-blue-800" :eventKey 1 :href "#/"} "Home"]
-      [NavItem {:class "navitem-material-blue-800" :eventKey 2 :href "#/about"} "About Us"]
+      [NavItem {:class "navitem-material-light-blue-800" :eventKey 1 :href "#/"} "Home"]
+      [NavItem {:class "navitem-material-light-blue-800" :eventKey 2 :href "#/about"} "About Us"]
 
-      [DropdownButton {:class "dropdownbutton-material-blue-800" :eventKey 3 :title "Sport"}
-       [MenuItem {:class "menuitem-material-blue-800" :eventKey "1"} "Table Tennis"]
-       [MenuItem {:class "menuitem-material-blue-800" :eventKey "2"} "Chess"]
-       [MenuItem {:class "menuitem-material-blue-800" :eventKey "3"} "Badminton"]
-       [MenuItem {:class "menuitem-material-blue-800" :eventKey "4"} "Tennis"]
-       [MenuItem {:class "menuitem-material-blue-800" :eventKey "5"} "Cricket"]
-       [MenuItem {:class "menuitem-material-blue-800" :eventKey "6"} "Soccer"]]
+      [DropdownButton {:class "dropdownbutton-material-light-blue-800" :eventKey 3 :title "Sport"}
+       [MenuItem {:class "menuitem-material-light-blue-800" :eventKey "1"} "Table Tennis"]
+       [MenuItem {:class "menuitem-material-light-blue-800" :eventKey "2"} "Chess"]
+       [MenuItem {:class "menuitem-material-light-blue-800" :eventKey "3"} "Badminton"]
+       [MenuItem {:class "menuitem-material-light-blue-800" :eventKey "4"} "Tennis"]
+       [MenuItem {:class "menuitem-material-light-blue-800" :eventKey "5"} "Cricket"]
+       [MenuItem {:class "menuitem-material-light-blue-800" :eventKey "6"} "Soccer"]]
 
       [DropdownButton {:eventKey 4 :title "Manage Events"}
-       [MenuItem {:class "menuitem-material-blue-800":eventKey "1" :href "#/addevent"} "Add"]
-       [MenuItem {:class "menuitem-material-blue-800":eventKey "2" :href "#/myevents"} "My Events"]]]
+       [MenuItem {:class "menuitem-material-light-blue-800":eventKey "1" :href "#/addevent"} "Add"]
+       [MenuItem {:class "menuitem-material-light-blue-800":eventKey "2" :href "#/myevents"} "My Events"]]]
 
       [Nav {:navbar true :right true}
-        [NavItem {:class "navitem-material-blue-800" :eventKey 1 :href "#/login"} "Login"]
-        [NavItem {:class "navitem-material-blue-800" :eventKey 2 :href "#/register"} "Register"]]]]))
+        [NavItem {:class "navitem-material-light-blue-800" :eventKey 1 :href "#/login"} "Login"]
+        [NavItem {:class "navitem-material-light-blue-800" :eventKey 2 :href "#/register"} "Register"]]]]))
 
 (defn navbar []
   (let [collapsed? (atom true)]
@@ -275,7 +275,7 @@
             [:img {:width 600 :height 250 :alt "600x250" :src src-ref}]
             [:div {:className "carousel-caption"}
               [:h3 headline]
-              [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href link-ref} name-ref]]]]))]]
+              [:p [Button {:class "btn-material-light-blue-800" :bsStyle "primary" :href link-ref} name-ref]]]]))]]
 
      [:br][:br]
 
@@ -286,7 +286,7 @@
              (let [{:keys [name-ref subtext click-param button-label button-href name-ref]} x]
                [Col {:xs 12 :md 3 :sm 4}
                     [:h3 {:style {:font-weight "bold"}} name-ref] [:p subtext]
-                    [:p [Button {:class "btn-material-blue-800" :bsStyle "primary" :href button-href
+                    [:p [Button {:class "btn-material-light-blue-800" :bsStyle "primary" :href button-href
                                  :onClick #(show-details click-param)} button-label]]]))]]]]))
 
 (defn show-details [type]
@@ -294,16 +294,44 @@
   )
 
 (defn get-events-details []
-  [Panel {:header "List of Events"}
-  [Accordion
-       [Panel {:header "Event" :eventKey "1"} [register-event]]
-       [Panel {:header "User" :eventKey "2"} [register-page]]
-       ]]
-  )
+    [Accordion {:bsStyle "primary"}
+     [Panel {:bsStyle "primary" :header "Create Event" :eventKey "1"} [register-event]]
+      [Panel {:bsStyle "primary" :header "Edit Events" :eventKey "2"}
+      [Accordion
+       [Panel {:bsStyle "primary" :header "Event - 1" :eventKey "3"} [register-event]]
+       [Panel {:bsStyle "primary" :header "Event - 2" :eventKey "4"} [register-event]]]]]
+)
+(defn search_entry [entry]
+  (log (str "Search : " entry)))
+
+(defn search-events-details []
+     [:div
+     [Panel {:bsStyle "primary" :header "Search Events" :eventKey "1"}
+      [Input {:type "text" :bsSize "medium" :placeholder "Enter event name or address "
+            :onChange #(search_entry (-> % .-target .-value))}]]
+      [Panel {:bsStyle "primary" :header "Search Results" :eventKey "2"}
+      [Accordion
+       [Panel {:bsStyle "primary" :header "Event - 1" :eventKey "3"} [favourite-event]]
+       [Panel {:bsStyle "primary" :header "Event - 2" :eventKey "4"} [favourite-event]]]]]
+)
+
+(defn participate-events-details []
+    [:div
+     [Panel {:bsStyle "primary" :header "Search Events and Submit" :eventKey "1"}
+      [Input {:type "text" :bsSize "medium" :placeholder "Enter event name or address "
+            :onChange #(search_entry (-> % .-target .-value))}]]
+      [Panel {:bsStyle "primary" :header "Search Results" :eventKey "2"}
+      [Accordion
+       [Panel {:bsStyle "primary" :header "Event - 1" :eventKey "3"} [add-event]]
+       [Panel {:bsStyle "primary":header "Event - 2" :eventKey "4"} [add-event]]]]]
+)
+
 (defn details-page []
   (fn []
      [:div.container
       (cond (= (@app-state :selected_detail) "events") (get-events-details)
+            (= (@app-state :selected_detail) "search") (search-events-details)
+            (= (@app-state :selected_detail) "participate") (participate-events-details)
       )]
   ))
 
@@ -338,16 +366,16 @@
                 :type "email" :bsSize "small" :label "Email Address" :placeholder "Enter email"}]
         [Row
          [Col {:mdOffset 2 :md 2 :xsOffset 2 :xs 2 }
-          [ButtonInput {:class "btn-material-blue-800" :type "reset" :bsStyle "primary" :value "Reset"}]
+          [ButtonInput {:class "btn-material-light-blue-800" :type "reset" :bsStyle "primary" :value "Reset"}]
           ]
          [Col {:md 2 :xs 2 }
-          [ButtonInput {:class "btn-material-blue-800" :type "submit" :bsStyle "primary" :value "Login" :onClick #(user-login-click @login_doc)}]
+          [ButtonInput {:class "btn-material-light-blue-800" :type "submit" :bsStyle "primary" :value "Login" :onClick #(user-login-click @login_doc)}]
           ]
          [Col {:md 2 :xs 2}
           [Button {:type "submit" :bsStyle "primary" :href "/syncfb" :onClick #(true)} "LoginFB"]
           ]
          [Col {:md 2 :xs 2 }
-          [Button {:class "btn-material-blue-800" :bsStyle "primary" :href "#/register"} "Register"]]]]])))
+          [Button {:class "btn-material-light-blue-800" :bsStyle "primary" :href "#/register"} "Register"]]]]])))
 
 (def url_list {:usertoken1
                  (fn [username password]
@@ -405,14 +433,14 @@
         [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }[:h2 "Register New User"]]]
         (for [x (:items_register (@app_state :register_user_items))]
           (let [{:keys [label placeholder ref-key]} x]
-              [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
+              [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-4" :wrapperClassName "col-xs-4"
                 :type (:type x) :bsSize "small" :label label :placeholder placeholder
                 :onChange #(swap! register_doc assoc-in [(first ref-key)] (-> % .-target .-value))}]))
         [Row
          [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4 }
-          [ButtonInput {:type "reset" :class "btn-material-blue-800" :bsStyle "primary" :value "Reset"}]]
+          [ButtonInput {:type "reset" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Reset"}]]
          [Col {:md 3 :xs 4 }
-          [ButtonInput {:type "submit" :class "btn-material-blue-800" :bsStyle "primary" :value "Register"
+          [ButtonInput {:type "submit" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Submit"
                         :onClick #(user-register-click @register_doc)}]]]]])))
 
 (defn register-event []
@@ -420,19 +448,55 @@
     (fn []
       [:form  {:className "form-horizontal"}
         [Grid
-          [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }[:h2 "Register New Event"]]]
+          [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }]]
             (for [x (:items_register (@app_state :register_event_items))]
               (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
-                    :mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
+                    :mdOffset 4 :xsOffset 2 :labelClassName "col-xs-4" :wrapperClassName "col-xs-4"
                     :type (:type x) :bsSize "small" :label label :placeholder placeholder
                     :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
 
            [Row
-            [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4 }
-              [ButtonInput {:type "reset" :class "btn-material-blue-800" :bsStyle "primary" :value "Reset"}]]
+            [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4}
+              [ButtonInput {:type "reset" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Reset"}]]
             [Col {:md 3 :xs 4 }
-              [ButtonInput {:type "submit" :class "btn-material-blue-800" :bsStyle "primary" :value "Register"
+              [ButtonInput {:type "submit" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Submit"
+                            :onClick #(user-register-click @register_doc)}]]]]])))
+
+(defn add-event []
+  (let [event_doc (reagent/atom (@app-state :event))]
+    (fn []
+      [:form  {:className "form-horizontal"}
+        [Grid
+          [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }]]
+            (for [x (:items_register (@app_state :register_event_items))]
+              (let [{:keys [label fieldtype placeholder ref-key]} x]
+              [Input {
+                    :mdOffset 2 :xsOffset 1 :labelClassName "col-xs-4" :wrapperClassName "col-xs-4"
+                    :type (:type x) :bsSize "small" :label label :placeholder placeholder
+                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
+
+           [Row
+            [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4}
+              [ButtonInput {:type "submit" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Participate"
+                            :onClick #(user-register-click @register_doc)}]]]]])))
+
+(defn favourite-event []
+  (let [event_doc (reagent/atom (@app-state :event))]
+    (fn []
+      [:form  {:className "form-horizontal"}
+        [Grid
+          [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }]]
+            (for [x (:items_register (@app_state :register_event_items))]
+              (let [{:keys [label fieldtype placeholder ref-key]} x]
+              [Input {
+                    :mdOffset 4 :xsOffset 2 :labelClassName "col-xs-4" :wrapperClassName "col-xs-4"
+                    :type (:type x) :bsSize "small" :label label :placeholder placeholder
+                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
+
+           [Row
+            [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4}
+              [ButtonInput {:type "submit" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Like"
                             :onClick #(user-register-click @register_doc)}]]]]])))
 
 (defn search_entry [entry]

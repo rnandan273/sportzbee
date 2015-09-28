@@ -38,7 +38,8 @@
                  [com.datomic/datomic-free "0.9.5153"  :exclusions [joda-time]]
                  [org.clojure/core.logic "0.8.5"]
                  [com.cemerick/friend "0.2.0"]
-                 [org.clojure/data.json "0.2.6"]]
+                 [org.clojure/data.json "0.2.6"]
+                 [bk/ring-gzip "0.1.1"]]
 
   :min-lein-version "2.0.0"
   :uberjar-name "sportzbee.jar"

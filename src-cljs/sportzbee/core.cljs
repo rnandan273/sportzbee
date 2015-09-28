@@ -448,13 +448,14 @@
     (fn []
       [:form  {:className "form-horizontal"}
         [Grid
-          [Row [Col {:mdOffset 3 :md 9 :xsOffset 1 :xs 11 }]]
+          [Row [Col {:md 6 :xs 6}
             (for [x (:items_register (@app_state :register_event_items))]
               (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
-                    :mdOffset 2 :xsOffset 1 :labelClassName "col-xs-4" :wrapperClassName "col-xs-5"
+                     :labelClassName "col-xs-2" :wrapperClassName "col-xs-4"
                     :type (:type x) :bsSize "small" :label label :placeholder placeholder
-                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
+                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))]
+           [Col {:md 6 :xs 6}] "Map"]
 
            [Row
             [Col {:mdOffset 2 :md 3 :xsOffset 2 :xs 4}
@@ -468,13 +469,14 @@
     (fn []
       [:form  {:className "form-horizontal"}
         [Grid
-          [Row [Col {:mdOffset 2 :md 9 :xsOffset 1 :xs 11}]]
+          [Row [Col {:md 6 :xs 6}
             (for [x (:items_register (@app_state :register_event_items))]
               (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
-                     :labelClassName "col-xs-2 col-md-2" :wrapperClassName "col-xs-2 col-md-2"
+                     :labelClassName "col-xs-2" :wrapperClassName "col-xs-4"
                     :type (:type x) :bsSize "small" :label label :placeholder placeholder
-                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
+                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))]
+           [Col {:md 6 :xs 6}] "Map"]
 
            [Row
             [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10}
@@ -486,13 +488,14 @@
     (fn []
       [:form  {:className "form-horizontal"}
         [Grid
-          [Row [Col {:mdOffset 2 :md 9 :xsOffset 2 :xs 10 }]]
+          [Row [Col {:md 6 :xs 6}
             (for [x (:items_register (@app_state :register_event_items))]
               (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
-                    :labelClassName "col-xs-4 col-md-4" :wrapperClassName "col-xs-4 col-md-6"
+                     :labelClassName "col-xs-2" :wrapperClassName "col-xs-4"
                     :type (:type x) :bsSize "small" :label label :placeholder placeholder
-                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
+                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))]
+           [Col {:md 6 :xs 6}] "Map"]
 
            [Row
             [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10}

@@ -448,14 +448,14 @@
     (fn []
       [:form  {:className "form-horizontal"}
         [Grid
-          [Row [Col {:md 6 :xs 6}
+          [Row [Col {:md 12 :xs 12}
             (for [x (:items_register (@app_state :register_event_items))]
               (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
                      :labelClassName "col-xs-2" :wrapperClassName "col-xs-4"
                     :type (:type x) :bsSize "small" :label label :placeholder placeholder
                     :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))]
-           [Col {:md 6 :xs 6}] "Map"]
+           [Col {:md 3 :xs 6} "Map"]]
 
            [Row
             [Col {:mdOffset 2 :md 3 :xsOffset 2 :xs 4}
@@ -469,17 +469,16 @@
     (fn []
       [:form  {:className "form-horizontal"}
         [Grid
-          [Row [Col {:md 6 :xs 6}
+          [Row [Col {:md 12 :xs 12}
             (for [x (:items_register (@app_state :register_event_items))]
               (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
-                     :labelClassName "col-xs-2" :wrapperClassName "col-xs-4"
+                     :labelClassName "col-xs-4" :wrapperClassName "col-xs-4"
                     :type (:type x) :bsSize "small" :label label :placeholder placeholder
-                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))]
-           [Col {:md 6 :xs 6}] "Map"]
+                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))]]
 
            [Row
-            [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10}
+            [Col {:mdOffset 3 :md 9 :xsOffset 3 :xs 9}
               [ButtonInput {:type "submit" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Participate"
                             :onClick #(user-register-click @register_doc)}]]]]])))
 
@@ -488,17 +487,16 @@
     (fn []
       [:form  {:className "form-horizontal"}
         [Grid
-          [Row [Col {:md 6 :xs 6}
+          [Row [Col {:md 12 :xs 12}
             (for [x (:items_register (@app_state :register_event_items))]
               (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
-                     :labelClassName "col-xs-2" :wrapperClassName "col-xs-4"
+                     :labelClassName "col-xs-4" :wrapperClassName "col-xs-4"
                     :type (:type x) :bsSize "small" :label label :placeholder placeholder
-                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))]
-           [Col {:md 6 :xs 6}] "Map"]
+                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))]]
 
            [Row
-            [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10}
+            [Col {:mdOffset 3 :md 9 :xsOffset 3 :xs 9}
               [ButtonInput {:type "submit" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Like"
                             :onClick #(user-register-click @register_doc)}]]]]])))
 

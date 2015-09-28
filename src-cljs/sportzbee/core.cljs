@@ -448,16 +448,16 @@
     (fn []
       [:form  {:className "form-horizontal"}
         [Grid
-          [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }]]
+          [Row [Col {:mdOffset 3 :md 9 :xsOffset 1 :xs 11 }]]
             (for [x (:items_register (@app_state :register_event_items))]
               (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
-                    :mdOffset 4 :xsOffset 2 :labelClassName "col-xs-4" :wrapperClassName "col-xs-4"
+                    :mdOffset 2 :xsOffset 1 :labelClassName "col-xs-4" :wrapperClassName "col-xs-5"
                     :type (:type x) :bsSize "small" :label label :placeholder placeholder
                     :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
 
            [Row
-            [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4}
+            [Col {:mdOffset 2 :md 3 :xsOffset 2 :xs 4}
               [ButtonInput {:type "reset" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Reset"}]]
             [Col {:md 3 :xs 4 }
               [ButtonInput {:type "submit" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Submit"
@@ -468,16 +468,16 @@
     (fn []
       [:form  {:className "form-horizontal"}
         [Grid
-          [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }]]
+          [Row [Col {:mdOffset 2 :md 9 :xsOffset 1 :xs 11}]]
             (for [x (:items_register (@app_state :register_event_items))]
               (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
-                    :mdOffset 2 :xsOffset 1 :labelClassName "col-xs-4" :wrapperClassName "col-xs-4"
+                     :labelClassName "col-xs-2 col-md-2" :wrapperClassName "col-xs-2 col-md-2"
                     :type (:type x) :bsSize "small" :label label :placeholder placeholder
                     :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
 
            [Row
-            [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4}
+            [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10}
               [ButtonInput {:type "submit" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Participate"
                             :onClick #(user-register-click @register_doc)}]]]]])))
 
@@ -486,16 +486,16 @@
     (fn []
       [:form  {:className "form-horizontal"}
         [Grid
-          [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }]]
+          [Row [Col {:mdOffset 2 :md 9 :xsOffset 2 :xs 10 }]]
             (for [x (:items_register (@app_state :register_event_items))]
               (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
-                    :mdOffset 4 :xsOffset 2 :labelClassName "col-xs-4" :wrapperClassName "col-xs-4"
+                    :labelClassName "col-xs-4 col-md-4" :wrapperClassName "col-xs-4 col-md-6"
                     :type (:type x) :bsSize "small" :label label :placeholder placeholder
                     :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
 
            [Row
-            [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4}
+            [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10}
               [ButtonInput {:type "submit" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Like"
                             :onClick #(user-register-click @register_doc)}]]]]])))
 

@@ -64,13 +64,13 @@
                                         :headline "Share sport events with your friends" })}
                               :services_items {
                                   :items_services (list
-                                       {:click-param "events" :name-ref "Organize" :subtext "Manage events completely"
+                                       {:click-param "events" :name-ref "Organize" :subtext "DIY event management.Create Tournaments, iternaries, invite players"
                                         :button-href "#/details" :button-label "More"}
-                                       {:click-param "search" :name-ref "Search" :subtext "Search events in your locality"
+                                       {:click-param "search" :name-ref "Search" :subtext "Search interesting events in your locality. You can participate in events based on availability"
                                         :button-href "#/details" :button-label "More"}
-                                       {:click-param "participate" :name-ref "Participate" :subtext "Participate and build portfolio"
+                                       {:click-param "participate" :name-ref "Participate" :subtext "Participate and build portfolio. This will data will help the players in many professional aspects"
                                         :button-href "#/details" :button-label "More"}
-                                       {:click-param "share" :name-ref "Share" :subtext "Share scores and performance with your friends"
+                                       {:click-param "share" :name-ref "Share" :subtext "Share scores and performance with your friends. Create your own brand."
                                         :button-href "#/details" :button-label "More"})}
                               :register_user_items {
                                   :items_register (list
@@ -211,30 +211,6 @@
           (let [{:keys [evt-key link-ref name-ref]} x]
             [NavItem {:class "navitem-material-light-blue-800" :eventKey evt-key :href link-ref} name-ref]))]]]))
 
-(defn reactnavbar1 []
-  (fn []
-    [Navbar {:class "navbar-material-light-blue-800" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
-     [CollapsibleNav {:eventKey 0}
-     [Nav {:navbar true :eventKey 0}
-      [NavItem {:class "navitem-material-light-blue-800" :eventKey 1 :href "#/"} "Home"]
-      [NavItem {:class "navitem-material-light-blue-800" :eventKey 2 :href "#/about"} "About Us"]
-
-      [DropdownButton {:class "dropdownbutton-material-light-blue-800" :eventKey 3 :title "Sport"}
-       [MenuItem {:class "menuitem-material-light-blue-800" :eventKey "1"} "Table Tennis"]
-       [MenuItem {:class "menuitem-material-light-blue-800" :eventKey "2"} "Chess"]
-       [MenuItem {:class "menuitem-material-light-blue-800" :eventKey "3"} "Badminton"]
-       [MenuItem {:class "menuitem-material-light-blue-800" :eventKey "4"} "Tennis"]
-       [MenuItem {:class "menuitem-material-light-blue-800" :eventKey "5"} "Cricket"]
-       [MenuItem {:class "menuitem-material-light-blue-800" :eventKey "6"} "Soccer"]]
-
-      [DropdownButton {:eventKey 4 :title "Manage Events"}
-       [MenuItem {:class "menuitem-material-light-blue-800":eventKey "1" :href "#/addevent"} "Add"]
-       [MenuItem {:class "menuitem-material-light-blue-800":eventKey "2" :href "#/myevents"} "My Events"]]]
-
-      [Nav {:navbar true :right true}
-        [NavItem {:class "navitem-material-light-blue-800" :eventKey 1 :href "#/login"} "Login"]
-        [NavItem {:class "navitem-material-light-blue-800" :eventKey 2 :href "#/register"} "Register"]]]]))
-
 (defn navbar []
   (let [collapsed? (atom true)]
     (fn []
@@ -299,7 +275,9 @@
       [Panel {:bsStyle "primary" :header "Edit Events" :eventKey "2"}
       [Accordion
        [Panel {:bsStyle "primary" :header "Event - 1" :eventKey "3"} [register-event]]
-       [Panel {:bsStyle "primary" :header "Event - 2" :eventKey "4"} [register-event]]]]]
+       [Panel {:bsStyle "primary" :header "Event - 2" :eventKey "4"} [register-event]]
+       [Panel {:bsStyle "primary" :header "Event - 3" :eventKey "5"} [register-event]]
+       [Panel {:bsStyle "primary" :header "Event - 4" :eventKey "6"} [register-event]]]]]
 )
 (defn search_entry [entry]
   (log (str "Search : " entry)))
@@ -430,12 +408,12 @@
     (fn []
       [:form  {:className "form-horizontal"}
        [Grid
-        [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }[:h2 "Register New User"]]]
+        [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }[:h2 "Register New User"]]
         (for [x (:items_register (@app_state :register_user_items))]
           (let [{:keys [label placeholder ref-key]} x]
               [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-4" :wrapperClassName "col-xs-4"
                 :type (:type x) :bsSize "small" :label label :placeholder placeholder
-                :onChange #(swap! register_doc assoc-in [(first ref-key)] (-> % .-target .-value))}]))
+                :onChange #(swap! register_doc assoc-in [(first ref-key)] (-> % .-target .-value))}]))]
         [Row
          [Col {:mdOffset 3 :md 3 :xsOffset 2 :xs 4 }
           [ButtonInput {:type "reset" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Reset"}]]
@@ -508,12 +486,12 @@
     [Col {:mdOffset 1 :xsOffset 1 :xs 5 :md 5} [Row [:h3 "Sportzbee"]]
                  [Row [:p "is online social & digital sports platform for sports enthusiast to capture,
                        record and share sports events & matches happening all over the world."]]
-                 [Row [:h4 "© 2014 SportzEvents Inc. All rights reserved."]]]
+                 [Row [:h4 "© 2014 SportzBee Inc. All rights reserved."]]]
     [Col {:xs 5 :md 5} [Row [:h5 "Disclaimer"]]
                  [Row [:p "Please contact the organizer of the event that you want to participate or
-                       attend. Sportzevents.com attempts to provide information about events and gathers
+                       attend. SportzBee.com attempts to provide information about events and gathers
                        event information from publicly available sources. The information is subject to change.
-                       Sportzevents.com does not take responsibility for any loss
+                       SportzBee.com does not take responsibility for any loss
                        incurred due to plans made on the basis of the information on the Web site"]]]]])
 
 (defn fblogin-page []

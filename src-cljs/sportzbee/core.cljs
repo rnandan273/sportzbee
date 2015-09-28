@@ -80,15 +80,17 @@
                                       {:label "Email" :placeholder "Enter email" :type "email" :ref-key (list :email)})}
                               :register_event_items {
                                   :items_register (list
-                                      {:label "Event Name" :placeholder "Enter event name" :ref-key (list :event_name)}
-                                      {:label "Venue Name" :placeholder "Enter venue name" :ref-key (list :venue_name)}
-                                      {:label "Street Name" :placeholder "Enter street name" :ref-key (list :street)}
-                                      {:label "Landmark" :placeholder "Enter landmark name" :ref-key (list :landmark)}
-                                      {:label "City" :placeholder "Enter city name" :ref-key (list :city)}
-                                      {:label "State" :placeholder "Enter state name" :ref-key (list :state)}
-                                      {:label "Pin" :placeholder "Enter pin" :ref-key (list :pin)}
-                                      {:label "Contact Info" :placeholder "Enter contact information" :ref-key (list :contact_info)}
-                                      {:label "Other Info" :placeholder "Enter other information" :ref-key (list :other_info)})}
+                                      {:label "Event Name" :type "text" :placeholder "Enter event name" :ref-key (list :event_name)}
+                                      {:label "Start Date" :type "date" :placeholder "Enter start date" :ref-key (list :start_date)}
+                                      {:label "End Date " :type "date" :placeholder "Enter end date" :ref-key (list :end_date)}
+                                      {:label "Venue Name" :type "text" :placeholder "Enter venue name" :ref-key (list :venue_name)}
+                                      {:label "Street Name" :type "text" :placeholder "Enter street name" :ref-key (list :street)}
+                                      {:label "Landmark" :type "text" :placeholder "Enter landmark name" :ref-key (list :landmark)}
+                                      {:label "City" :type "text" :placeholder "Enter city name" :ref-key (list :city)}
+                                      {:label "State" :type "text":placeholder "Enter state name" :ref-key (list :state)}
+                                      {:label "Pin" :type "text" :placeholder "Enter pin" :ref-key (list :pin)}
+                                      {:label "Contact Info" :type "text" :placeholder "Enter contact information" :ref-key (list :contact_info)}
+                                      {:label "Other Info" :type "text" :placeholder "Enter other information" :ref-key (list :other_info)})}
                               }))
 
 
@@ -291,11 +293,19 @@
   (swap! app-state assoc-in [:selected_detail] type)
   )
 
-
+(defn get-events-details []
+  [Panel {:header "List of Events"}
+  [Accordion
+       [Panel {:header "Event" :eventKey "1"} [register-event]]
+       [Panel {:header "User" :eventKey "2"} [register-page]]
+       ]]
+  )
 (defn details-page []
   (fn []
-     [:div [:h1 "Details for " (@app-state :selected_detail)]
-        [:div "content " (@app-state :selected_detail)]]))
+     [:div.container
+      (cond (= (@app-state :selected_detail) "events") (get-events-details)
+      )]
+  ))
 
 (defn logout-page []
   [:div.container
@@ -412,10 +422,10 @@
         [Grid
           [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }[:h2 "Register New Event"]]]
             (for [x (:items_register (@app_state :register_event_items))]
-              (let [{:keys [label placeholder ref-key]} x]
+              (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
                     :mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                    :type "text" :bsSize "small" :label label :placeholder placeholder
+                    :type (:type x) :bsSize "small" :label label :placeholder placeholder
                     :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))
 
            [Row
@@ -463,31 +473,42 @@
 (secretary/set-config! :prefix "#")
 
 (secretary/defroute "/" []
-  (session/put! :page :home))
+  (session/put! :page :home)
+  (session/put! :current-page "home")
+  )
 
 (secretary/defroute "/about" []
-  (session/put! :page :about))
+  (session/put! :page :about)
+  (session/put! :current-page "about")
+  )
 
 (secretary/defroute "/register" []
-  (session/put! :page :register))
+  (session/put! :page :register)
+  (session/put! :current-page "register"))
 
 (secretary/defroute "/addevent" []
-  (session/put! :page :addevent))
+  (session/put! :page :addevent)
+  (session/put! :current-page "addevent"))
 
 (secretary/defroute "/myevents" []
-  (session/put! :page :myevents))
+  (session/put! :page :myevents)
+  (session/put! :current-page "myevents"))
 
 (secretary/defroute "/details" []
-  (session/put! :page :details))
+  (session/put! :page :details)
+  (session/put! :current-page "details"))
 
 (secretary/defroute "/chat" []
-  (session/put! :page :chat))
+  (session/put! :page :chat)
+  (session/put! :current-page "chat"))
 
 (secretary/defroute "/login" []
-  (session/put! :page :login))
+  (session/put! :page :login)
+  (session/put! :current-page "login"))
 
 (secretary/defroute "/logout" []
-  (session/put! :page :logout))
+  (session/put! :page :logout)
+  (session/put! :current-page "logout"))
 
 (defn on_logout []
   (cookies/remove! "token")
@@ -537,11 +558,35 @@
 (defn fetch-docs! []
   (GET (str js/context "/docs") {:handler #(session/put! :docs %)}))
 
+
+(defn current-page-will-mount []
+   (log (str "current page will mount"))
+)
+
+(defn current-page-render []
+   (log (str "current page rendering " (if (= (session/get :current-page) "home") (log "HOE PAGE"))))
+  [(pages (session/get :page))])
+
+(defn current-page-did-mount []
+  (log (str "current page did mount"))
+)
+
+(defn current-page-did-update []
+  (log (str "current page did update")))
+
+
+(defn current-page []
+  (reagent/create-class {:component-will-mount current-page-will-mount
+                         :component-function current-page-render
+                         :component-did-mount current-page-did-mount
+                         :component-did-update current-page-did-update}))
+
 (defn mount-components []
   ;;(reagent/render [#'navbar] (.getElementById js/document "navbar"))
   (reagent/render [#'reactnavbar] (.getElementById js/document "reactnavbar"))
-  (reagent/render [#'page] (.getElementById js/document "app"))
+  ;;(reagent/render [#'page] (.getElementById js/document "app"))
   ;;(reagent/render [#'services] (.getElementById js/document "services"))
+  (reagent/render-component [current-page] (.getElementById js/document "app"))
   (reagent/render [#'footer] (.getElementById js/document "footer")))
 
 (defn init! []
@@ -549,4 +594,9 @@
   (hook-browser-navigation!)
   (mount-components)
 )
+
+
+
+
+
 

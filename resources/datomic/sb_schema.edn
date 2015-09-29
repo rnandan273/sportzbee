@@ -1,0 +1,250 @@
+;;[entity, attribute, value, time]
+[
+ {:db/id #db/id[:db.part/db]
+ :db/ident :sportzbee/address
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "A sportzbee address name"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :person/name
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "A sportzbee person's name"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :person/age
+ :db/valueType :db.type/long
+ :db/cardinality :db.cardinality/one
+ :db/doc "A person's age"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :person/address
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "persons address"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :person/phone
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/many
+ :db/doc "persons phone number"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :person/sex
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "persons male or female"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :person/sports
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/many
+ :db/doc "The sports activities that the person is interested"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :person/likes
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/many
+ :db/doc "The persons likes"
+ :db.install/_attribute :db.part/db}
+
+ ;;sport
+ {:db/id #db/id[:db.part/db]
+ :db/ident :sport/name
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "name of sport"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :sport/details
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "details about the sport"
+ :db.install/_attribute :db.part/db}
+
+ ;;role
+ {:db/id #db/id[:db.part/db]
+ :db/ident :role/name
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "name of sport"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :role/details
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "details about the role"
+ :db.install/_attribute :db.part/db}
+
+ ;;tourney
+ {:db/id #db/id[:db.part/db]
+ :db/ident :tourney/name
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "The tournament"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :tourney/organiser
+ :db/valueType :db.type/ref
+ :db/cardinality :db.cardinality/many
+ :db/doc "The tournament orgamizers"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :tourney/startdate
+ :db/valueType :db.type/instant
+ :db/cardinality :db.cardinality/one
+ :db/doc "The tournament startdate"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :tourney/enddate
+ :db/valueType :db.type/instant
+ :db/cardinality :db.cardinality/one
+ :db/doc "The tournament enddate"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :tourney/city
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "The tournament city"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :tourney/address
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "The tournament address"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :tourney/pin
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "The tournament pincode"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :tourney/sport
+ :db/valueType :db.type/ref
+ :db/cardinality :db.cardinality/one
+ :db/doc "The tournament that this sport refers to"
+ :db.install/_attribute :db.part/db}
+
+ ;; team
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :team/name
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "The name of team"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :team/sport
+ :db/valueType :db.type/ref
+ :db/cardinality :db.cardinality/one
+ :db/doc "The sport that team plays"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :team/player
+ :db/valueType :db.type/ref
+ :db/cardinality :db.cardinality/many
+ :db/doc "The player reference to person"
+ :db.install/_attribute :db.part/db}
+
+ ;; participant
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :participant/person
+ :db/valueType :db.type/ref
+ :db/cardinality :db.cardinality/one
+ :db/doc "The player reference to person"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :participant/role
+ :db/valueType :db.type/ref
+ :db/cardinality :db.cardinality/one
+ :db/doc "The role of the person"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :participant/team
+ :db/valueType :db.type/ref
+ :db/cardinality :db.cardinality/one
+ :db/doc "The reference to team"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :participant/tourney
+ :db/valueType :db.type/ref
+ :db/cardinality :db.cardinality/one
+ :db/doc "The reference to tourney"
+ :db.install/_attribute :db.part/db}
+
+;; match
+ {:db/id #db/id[:db.part/db]
+ :db/ident :match/team
+ :db/valueType :db.type/ref
+ :db/cardinality :db.cardinality/many
+ :db/doc "The reference to teams"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :match/tourney
+ :db/valueType :db.type/ref
+ :db/cardinality :db.cardinality/many
+ :db/doc "The reference to tourney"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :match/name
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "The name of the match"
+ :db.install/_attribute :db.part/db}
+
+ ;; score
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :score/match
+ :db/valueType :db.type/ref
+ :db/cardinality :db.cardinality/one
+ :db/doc "The reference to match"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :score/log
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "The score to match"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :score/summary
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "The score summary"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+ :db/ident :score/comments
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/one
+ :db/doc "The score comments"
+ :db.install/_attribute :db.part/db}
+ ]

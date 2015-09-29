@@ -7,10 +7,12 @@
   (:use [clojure.pprint :as pprint])
 )
 
-(def uri "datomic:free://localhost:4334/sportzbee")
+;;(def uri "datomic:free://localhost:4334/sportzbee")
+(def uri "datomic:mem://sportzbee-db")
 ;;
 (defn listdbs []
-  (timbre/info "EXISTING dbs" (d/get-database-names "datomic:free://localhost:4334/*")))
+ ;; (timbre/info "EXISTING dbs" (d/get-database-names "datomic:free://localhost:4334/*")))
+  (timbre/info "EXISTING dbs" (d/get-database-names "datomic:mem://*")))
 
 (defn load-schema [dburi]
   (let [conn (d/connect dburi)

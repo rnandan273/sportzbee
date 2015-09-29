@@ -287,7 +287,7 @@
      [Panel {:bsStyle "primary" :header "Search Events" :eventKey "1"}
       [Input {:type "text" :bsSize "medium" :placeholder "Enter event name or address "
             :onChange #(search_entry (-> % .-target .-value))}]]
-      [Panel {:bsStyle "primary" :header "Search Results" :eventKey "2"}
+      [Panel {:header "Search Results" :eventKey "2"}
       [Accordion
        [Panel {:bsStyle "primary" :header "Event - 1" :eventKey "3"} [favourite-event]]
        [Panel {:bsStyle "primary" :header "Event - 2" :eventKey "4"} [favourite-event]]]]]
@@ -295,10 +295,10 @@
 
 (defn participate-events-details []
     [:div
-     [Panel {:bsStyle "primary" :header "Search Events and Submit" :eventKey "1"}
+     [Panel {:bsStyle "primary" :header "Search and Participate" :eventKey "1"}
       [Input {:type "text" :bsSize "medium" :placeholder "Enter event name or address "
             :onChange #(search_entry (-> % .-target .-value))}]]
-      [Panel {:bsStyle "primary" :header "Search Results" :eventKey "2"}
+      [Panel {:header "Search Results" :eventKey "2"}
       [Accordion
        [Panel {:bsStyle "primary" :header "Event - 1" :eventKey "3"} [add-event]]
        [Panel {:bsStyle "primary":header "Event - 2" :eventKey "4"} [add-event]]]]]

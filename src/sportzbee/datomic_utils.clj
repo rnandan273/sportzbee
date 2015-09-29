@@ -8,6 +8,7 @@
 )
 
 (def uri "datomic:free://localhost:4334/rengine")
+;;(def uri "datomic:mem://reco-db")
 (defn listdbs []
   (timbre/info "EXISTING dbs" (d/get-database-names "datomic:free://localhost:4334/*")))
 

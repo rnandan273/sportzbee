@@ -2,6 +2,7 @@
   (:require [sportzbee.layout :as layout]
             [compojure.core :refer [defroutes GET POST]]
             [sportzbee.datomic_utils :as dq]
+            [sportzbee.sportzbee_db_utils :as sbu]
             [sportzbee.usergrid_utils :as ug]
             [sportzbee.oauth_utils :as oa]
             [ring.util.http-response :refer [ok found]]
@@ -39,5 +40,19 @@
        (oa/logout))
 
 
-  (GET "/docs" [] (ok (-> "docs/docs.md" io/resource slurp))))
+  (GET "/docs" [] (ok (-> "docs/docs.md" io/resource slurp)))
+
+  ;; sportzbee related
+  (GET "/sbcmd" req (cond (= (:op (:params req)) "setup") (ok (sbu/dbsetup))
+                          (= (:op (:params req)) "list") (ok (sbu/dblist))
+                          (= (:op (:params req)) "clean") (ok (sbu/dbshutdown))
+                          (= (:op (:params req)) "load") (ok (sbu/dbload))
+                          (= (:op (:params req)) "query") (ok (sbu/dbquery))
+                          (= (:op (:params req)) "seed") (ok (sbu/dbseed))))
+  (GET "/listed_events" []
+       (ok (sbu/get_tourneys)))
+
+  )
+
+
 

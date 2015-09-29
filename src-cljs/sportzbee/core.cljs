@@ -211,29 +211,6 @@
           (let [{:keys [evt-key link-ref name-ref]} x]
             [NavItem {:class "navitem-material-light-blue-800" :eventKey evt-key :href link-ref} name-ref]))]]]))
 
-(defn navbar []
-  (let [collapsed? (atom true)]
-    (fn []
-      [:nav.navbar.navbar-inverse.navbar-fixed-top
-       [:div.container
-        [:div.navbar-header
-         [:button.navbar-toggle
-          {:class         (when-not @collapsed? "collapsed")
-           :data-toggle   "collapse"
-           :aria-expanded @collapsed?
-           :aria-controls "navbar"
-           :on-click      #(swap! collapsed? not)}
-          [:span.sr-only "Toggle Navigation"]
-          [:span.icon-bar]
-          [:span.icon-bar]
-          [:span.icon-bar]]
-         [:a.navbar-brand {:href "#/"} "Sportzbee"]]
-        [:div.navbar-collapse.collapse
-         (when-not @collapsed? {:class "in"})
-         [:ul.nav.navbar-nav
-          [nav-link "#/" "Home" :home collapsed?]
-          [nav-link "#/about" "About" :about collapsed?]]]]])))
-
 (defn about-page []
   [:div.container
    [:div.row
@@ -284,10 +261,10 @@
 
 (defn search-events-details []
      [:div
-     [Panel {:bsStyle "primary" :header "Search Events" :eventKey "1"}
+     [:section  [:h4 "Search Events"]
       [Input {:type "text" :bsSize "medium" :placeholder "Enter event name or address "
             :onChange #(search_entry (-> % .-target .-value))}]]
-      [Panel {:header "Search Results" :eventKey "2"}
+      [:section [:h4 "Search Results"]
       [Accordion
        [Panel {:bsStyle "primary" :header "Event - 1" :eventKey "3"} [favourite-event]]
        [Panel {:bsStyle "primary" :header "Event - 2" :eventKey "4"} [favourite-event]]]]]
@@ -295,10 +272,10 @@
 
 (defn participate-events-details []
     [:div
-     [Panel {:bsStyle "primary" :header "Search and Participate" :eventKey "1"}
+     [:section  [:h4 "Search and Participate"]
       [Input {:type "text" :bsSize "medium" :placeholder "Enter event name or address "
             :onChange #(search_entry (-> % .-target .-value))}]]
-      [Panel {:header "Search Results" :eventKey "2"}
+      [:section [:h4 "Search Results"]
       [Accordion
        [Panel {:bsStyle "primary" :header "Event - 1" :eventKey "3"} [add-event]]
        [Panel {:bsStyle "primary":header "Event - 2" :eventKey "4"} [add-event]]]]]

@@ -40,6 +40,7 @@
                                       :start_date ""
                                       :end_date ""
                                       :details ""}
+                              :list_events (list)
                               :fbpage ""
                               :selected_detail ""
                               :nav_items {
@@ -80,7 +81,7 @@
                                       {:label "Email" :placeholder "Enter email" :type "email" :ref-key (list :email)})}
                               :register_event_items {
                                   :items_register (list
-                                      {:label "Event Name" :type "text" :placeholder "Enter event name" :ref-key (list :event_name)}
+                                      {:label "Event Name" :type "text" :placeholder "Enter event name" :ref-key (list :tourney-name)}
                                       {:label "Start Date" :type "date" :placeholder "Enter start date" :ref-key (list :start_date)}
                                       {:label "End Date " :type "date" :placeholder "Enter end date" :ref-key (list :end_date)}
                                       {:label "Venue Name" :type "text" :placeholder "Enter venue name" :ref-key (list :venue_name)}
@@ -89,7 +90,7 @@
                                       {:label "City" :type "text" :placeholder "Enter city name" :ref-key (list :city)}
                                       {:label "State" :type "text":placeholder "Enter state name" :ref-key (list :state)}
                                       {:label "Pin" :type "text" :placeholder "Enter pin" :ref-key (list :pin)}
-                                      {:label "Contact Info" :type "text" :placeholder "Enter contact information" :ref-key (list :contact_info)}
+                                      {:label "Contact Info" :type "text" :placeholder "Enter contact information" :ref-key (list :organiser_name)}
                                       {:label "Other Info" :type "text" :placeholder "Enter other information" :ref-key (list :other_info)})}
                               }))
 
@@ -180,6 +181,47 @@
             )))
   )
 
+(def select-values (comp vals select-keys))
+
+(defn transform-ui [rx]
+
+  (let [vofmaps (into [] (:items_register (@app_state :register_event_items)))]
+   ;; (log  (map #(assoc (merge (select-keys rx (:ref-key %)) %) :item_value (select-values rx (:ref-key %))) vofmaps))
+    (map #(assoc (merge (select-keys rx (:ref-key %)) %) :item_value (select-values rx (:ref-key %))) vofmaps)
+  )
+  ;;(merge each with the items-register)
+)
+
+(defn read-service-response_old [response]
+
+  (log (str "After Service response \n"))
+  (log (:items_favourites (@app_state :register_event_items)))
+  (def myvec (atom ()))
+  (loop [results (walk/keywordize-keys response)]
+                   (when (> (count results) 0)
+                     (do (swap! myvec conj (first results))
+                       (log myvec)
+                       )
+                   (recur (rest results))))
+  (log  myvec)
+  (log (:items_favourites (@app_state :register_event_items)))
+)
+(defn read-service-response_working [response]
+
+  (log (str "After Service response \n"))
+  (log (:items_favourites (@app_state :register_event_items)))
+  (loop [results (walk/keywordize-keys response)]
+                   (when (> (count results) 0)
+                     (transform-ui (first results))
+                   (recur (rest results))))
+)
+
+(defn read-service-response [response]
+
+  (swap! app-state assoc-in [:list_events] (map #(transform-ui %) (walk/keywordize-keys response)))
+  (log (into [] (@app_state :list_events)))
+)
+
 (defn nav-link [uri title page collapsed?]
   [:li {:class (when (= page (session/get :page)) "active")}
    [:a {:href uri
@@ -244,7 +286,7 @@
 
 (defn show-details [type]
   (swap! app-state assoc-in [:selected_detail] type)
-  )
+)
 
 (defn get-events-details []
     [Accordion {:bsStyle "primary"}
@@ -256,8 +298,6 @@
        [Panel {:bsStyle "primary" :header "Event - 3" :eventKey "5"} [register-event]]
        [Panel {:bsStyle "primary" :header "Event - 4" :eventKey "6"} [register-event]]]]]
 )
-(defn search_entry [entry]
-  (log (str "Search : " entry)))
 
 (defn search-events-details []
      [:div
@@ -266,8 +306,8 @@
             :onChange #(search_entry (-> % .-target .-value))}]]
       [:section [:h4 "Search Results"]
       [Accordion
-       [Panel {:bsStyle "primary" :header "Event - 1" :eventKey "3"} [favourite-event]]
-       [Panel {:bsStyle "primary" :header "Event - 2" :eventKey "4"} [favourite-event]]]]]
+       (for [elem (into [] (@app_state :list_events))]
+       [Panel {:bsStyle "primary" :header (:item_value (first elem)) :eventKey "3"} [favourite-event elem]])]]]
 )
 
 (defn participate-events-details []
@@ -277,8 +317,8 @@
             :onChange #(search_entry (-> % .-target .-value))}]]
       [:section [:h4 "Search Results"]
       [Accordion
-       [Panel {:bsStyle "primary" :header "Event - 1" :eventKey "3"} [add-event]]
-       [Panel {:bsStyle "primary":header "Event - 2" :eventKey "4"} [add-event]]]]]
+       (for [elem (into [] (@app_state :list_events))]
+       [Panel {:bsStyle "primary" :header (:item_value (first elem)) :eventKey "3"} [add-event elem]])]]]
 )
 
 (defn details-page []
@@ -418,17 +458,17 @@
               [ButtonInput {:type "submit" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Submit"
                             :onClick #(user-register-click @register_doc)}]]]]])))
 
-(defn add-event []
+(defn add-event [elem]
   (let [event_doc (reagent/atom (@app-state :event))]
     (fn []
       [:form  {:className "form-horizontal"}
         [Grid
           [Row [Col {:md 12 :xs 12}
-            (for [x (:items_register (@app_state :register_event_items))]
+            (for [x elem]
               (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
                      :labelClassName "col-xs-3" :wrapperClassName "col-xs-6"
-                    :type (:type x) :bsSize "small" :label label :placeholder placeholder
+                    :type (:type x) :bsSize "small" :label label :placeholder placeholder :value (:item_value x)
                     :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))]]
 
            [Row
@@ -436,18 +476,18 @@
               [ButtonInput {:type "submit" :class "btn-material-light-blue-800" :bsStyle "primary" :value "Participate"
                             :onClick #(user-register-click @register_doc)}]]]]])))
 
-(defn favourite-event []
-  (let [event_doc (reagent/atom (@app-state :event))]
-    (fn []
+(defn favourite-event [elem]
+    (let [event_doc (reagent/atom (@app-state :event))]
+      (fn []
       [:form  {:className "form-horizontal"}
         [Grid
           [Row [Col {:md 12 :xs 12}
-            (for [x (:items_register (@app_state :register_event_items))]
+              (for [x elem]
               (let [{:keys [label fieldtype placeholder ref-key]} x]
               [Input {
                      :labelClassName "col-xs-3" :wrapperClassName "col-xs-6"
                     :type (:type x) :bsSize "small" :label label :placeholder placeholder
-                    :onChange #(swap! event_doc assoc-in [(get ref-key 0)] (-> % .-target .-value))}]))]]
+                    :value (:item_value x)}]))]]
 
            [Row
             [Col {:mdOffset 3 :md 9 :xsOffset 3 :xs 9}
@@ -455,7 +495,13 @@
                             :onClick #(user-register-click @register_doc)}]]]]])))
 
 (defn search_entry [entry]
-  (log (str "Search : " entry)))
+  (log (str "Search : " entry))
+  (def service_url (str "/listed_events"))
+  (log (str "Get events" service_url))
+  (go
+     (read-service-response (<! (do-http-get service_url)))
+  )
+)
 
 (defn footer []
   [Grid

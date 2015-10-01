@@ -57,7 +57,7 @@
     {:source-paths ["src-cljs"]
      :compiler
      {:output-to "resources/public/js/app.js"
-      :externs ["react/externs/react.js"]
+      :externs ["react/externs/react.js" "externs.js"]
       :pretty-print true}}}}
 
   :profiles

@@ -268,13 +268,10 @@
     [:div.col-md-12
      "this is the story of sportzbee... work in progress"]]])
 
-(defn home-page_test []
-  [:div {:style {:height "300px"}}])
 
 (defn home-page []
   (fn []
     [:div.container
-
      [:div [Carousel
         (for [x (:items_carousel (@app_state :carousel_items))]
           (let [{:keys [src-ref link-ref name-ref :headline]} x]
@@ -284,7 +281,11 @@
               [:h3 headline]
               [:p [Button {:class "btn-material-light-blue-800" :bsStyle "primary" :href link-ref} name-ref]]]]))]]
 
-     [:br][:br]
+     [:br]
+     [:br]
+     [map-component]
+     [:br]
+     [:br]
 
      [:div
       [Grid {:fluid true}
@@ -631,6 +632,21 @@
         (.setEnabled true)))
 
 ;; -------------------------
+
+;;maps
+(defn map-render []
+  [:div {:style {:height "300px"}}])
+
+(defn map-did-mount [this]
+  (let [map-canvas (reagent/dom-node this)
+        map-options (clj->js {"center" (google.maps.LatLng. -34.397, 150.644)
+                              "zoom" 8})]
+        (js/google.maps.Map. map-canvas map-options)))
+
+(defn map-component []
+  (reagent/create-class {:reagent-render map-render
+                         :component-did-mount map-did-mount}))
+
 ;; Initialize app
 (defn fetch-docs! []
   (GET (str js/context "/docs") {:handler #(session/put! :docs %)}))
@@ -654,31 +670,20 @@
 
 (defn current-page []
   (reagent/create-class {:component-will-mount current-page-will-mount
-                         :component-function current-page-render
+                         :reagent-render current-page-render
                          :component-did-mount current-page-did-mount
                          :component-did-update current-page-did-update}))
 
-(comment
-(def *map* nil)
-(def my-opts
-   {"zoom"      8
-    "mapTypeId" google.maps.MapTypeId.ROADMAP
-    "center"    (google.maps.LatLng. -34.397, 150.644)})
 
-(defn map-load []
-  (let [elem (.getElementById js/document "map-canvas")]
-     (set! *map* (google.maps.Map. elem (clj->js my-opts)))))
-
-(google.maps.event.addDomListener js/window "load" map-load)
-
-)
 (defn mount-components []
-  ;;(reagent/render [#'navbar] (.getElementById js/document "navbar"))
+  ;;;;;(reagent/render [#'navbar] (.getElementById js/document "navbar"))
   (reagent/render [#'reactnavbar] (.getElementById js/document "reactnavbar"))
-  ;;(reagent/render [#'page] (.getElementById js/document "app"))
-  ;;(reagent/render [#'services] (.getElementById js/document "services"))
-  (reagent/render-component [current-page] (.getElementById js/document "app"))
-  (reagent/render [#'footer] (.getElementById js/document "footer")))
+  ;;;;;;(reagent/render [#'page] (.getElementById js/document "app"))
+  ;;;;;;(reagent/render [#'services] (.getElementById js/document "services"))
+  (reagent/render [current-page] (.getElementById js/document "app"))
+  ;;(reagent/render [home] (.getElementById js/document "app"))
+  (reagent/render [#'footer] (.getElementById js/document "footer"))
+  )
 
 (defn init! []
   (fetch-docs!)

@@ -58,6 +58,8 @@
      :compiler
      {:output-to "resources/public/js/app.js"
       :externs ["react/externs/react.js" "externs.js"]
+      :foreign-libs [{:file ~(str "https://maps.googleapis.com/maps/api/js?key=AIzaSyDUexZHH88EIeKZSS6U-efg0KDMQCZoH3w&libraries=places")
+                            :provides ["google.maps"]}]
       :pretty-print true}}}}
 
   :profiles

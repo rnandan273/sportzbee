@@ -52,6 +52,9 @@
   (GET "/listed_events" []
        (ok (sbu/get_tourneys)))
 
+  (GET "/getty_images" []
+       (ok (sbu/get_images)))
+
   )
 
 

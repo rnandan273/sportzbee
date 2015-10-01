@@ -11,6 +11,7 @@
             [markdown.core :refer [md->html]]
             [clojure.walk :as walk]
             [cognitect.transit :as t]
+            [google.maps]
             [ajax.core :refer [GET POST]])
   (:import goog.History)
   (:require-macros
@@ -55,21 +56,38 @@
                                             )}
                               :carousel_items {
                                   :items_carousel (list
-                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS5KkMqUZU3WnvkB4dgNkdtVIjT8rscF_WiRJYYJh8po34czNZ6Rg" :name-ref "Learn More >>"
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Learn More >>"
                                         :headline "Organize Tournaments and Manage them completely"}
-                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcR42O8I1cpoy6MTSSyA4HE0fmp6iPqaJ941dj5aeAnAsn4vp-gr" :name-ref "Search >>"
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Search >>"
                                         :headline "Search and participate in your favourite Sport events" }
-                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSS2ieU04J9IhCQyUIV5oWp2tScsmvwIRD5NQWBmfpVgIh6JtmzFg" :name-ref "Participate >>"
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Participate >>"
                                         :headline "Record Scores and build portfolio, share with friends" }
-                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCrfzpdol-vp7JgW-5guo5eLhQSYAWdOhcj9pJnOzA1BfqNPLG" :name-ref "Share >>"
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Share >>"
                                         :headline "Share sport events with your friends" }
-                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqe2g5vtAejH2PeatzHHorQAUDS6utRJ8Z13-zW-SNHRDMyOLe" :name-ref "Learn More >>"
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Learn More >>"
                                         :headline "Organize Tournaments and Manage them completely"}
-                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtgt0wmSThCSgmhkUQrM0mhUqhXGMthC77437w8i92iYl__iw9" :name-ref "Search >>"
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Search >>"
                                         :headline "Search and participate in your favourite Sport events" }
-                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQU_dRjxGqrzZacy9htPbotEGOvA-7nOYcb8vdS19DeKbRYvwEjtQ" :name-ref "Participate >>"
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Participate >>"
                                         :headline "Record Scores and build portfolio, share with friends" }
-                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTuy1Hxn36qbq73piv_qnUhWdeWse5FfHCfit9l2okFKF0oUxWdKQ" :name-ref "Share >>"
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Share >>"
+                                        :headline "Share sport events with your friends" }
+
+                                        {:link-ref "#/login" :src-ref "" :name-ref "Learn More >>"
+                                        :headline "Organize Tournaments and Manage them completely"}
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Search >>"
+                                        :headline "Search and participate in your favourite Sport events" }
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Participate >>"
+                                        :headline "Record Scores and build portfolio, share with friends" }
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Share >>"
+                                        :headline "Share sport events with your friends" }
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Learn More >>"
+                                        :headline "Organize Tournaments and Manage them completely"}
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Search >>"
+                                        :headline "Search and participate in your favourite Sport events" }
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Participate >>"
+                                        :headline "Record Scores and build portfolio, share with friends" }
+                                       {:link-ref "#/login" :src-ref "" :name-ref "Share >>"
                                         :headline "Share sport events with your friends" })}
                               :services_items {
                                   :items_services (list
@@ -146,12 +164,17 @@
 (defn log [s]
   (.log js/console (str s)))
 
-(defn response-handler[ch response]
+(defn response-handler [ch response]
   (go (>! ch response)(close! ch))
   (log "DONE"))
 
-(defn response-handler_test[response]
-  (log response))
+(defn get_random_image_index []
+  (rand-int (count (@app_state :getty_images)))
+)
+
+(defn response-handler-images [response]
+  (swap! app-state assoc-in [:getty_images] (walk/keywordize-keys (t/read read-json response)))
+)
 
 (defn do-http-get [url]
   (log (str "GET " url))
@@ -159,6 +182,12 @@
     (GET url {:handler (fn [response](response-handler ch response))
               :error-handler (fn [response] (response-handler ch response))})
     ch))
+
+(defn fetch_getty_images [url]
+  (go
+     (response-handler-images (<! (do-http-get url)))
+   )
+)
 
 (defn do-http-post [url doc]
   (log "POSTING ---->")
@@ -201,36 +230,13 @@
   ;;(merge each with the items-register)
 )
 
-(defn read-service-response_old [response]
-
-  (log (str "After Service response \n"))
-  (log (:items_favourites (@app_state :register_event_items)))
-  (def myvec (atom ()))
-  (loop [results (walk/keywordize-keys response)]
-                   (when (> (count results) 0)
-                     (do (swap! myvec conj (first results))
-                       (log myvec)
-                       )
-                   (recur (rest results))))
-  (log  myvec)
-  (log (:items_favourites (@app_state :register_event_items)))
-)
-(defn read-service-response_working [response]
-
-  (log (str "After Service response \n"))
-  (log (:items_favourites (@app_state :register_event_items)))
-  (loop [results (walk/keywordize-keys response)]
-                   (when (> (count results) 0)
-                     (transform-ui (first results))
-                   (recur (rest results))))
-)
-
 (defn read-service-response [response]
 
   (swap! app-state assoc-in [:list_events] (map #(transform-ui %) (walk/keywordize-keys response)))
   (log (into [] (@app_state :list_events)))
 )
 
+;;UI layer
 (defn nav-link [uri title page collapsed?]
   [:li {:class (when (= page (session/get :page)) "active")}
    [:a {:href uri
@@ -268,6 +274,9 @@
     [:div.col-md-12
      "this is the story of sportzbee... work in progress"]]])
 
+(defn get_random_image_url []
+  (:uri (get (@app_state :getty_images) (get_random_image_index)))
+)
 
 (defn home-page []
   (fn []
@@ -276,7 +285,7 @@
         (for [x (:items_carousel (@app_state :carousel_items))]
           (let [{:keys [src-ref link-ref name-ref :headline]} x]
             [CarouselItem
-            [:img {:width 500 :height 250 :alt "500x250" :src src-ref}]
+            [:img {:width 500 :height 150 :alt "500x150" :src (get_random_image_url)}]
             [:div {:className "carousel-caption"}
               [:h3 headline]
               [:p [Button {:class "btn-material-light-blue-800" :bsStyle "primary" :href link-ref} name-ref]]]]))]]
@@ -639,9 +648,13 @@
 
 (defn map-did-mount [this]
   (let [map-canvas (reagent/dom-node this)
-        map-options (clj->js {"center" (google.maps.LatLng. -34.397, 150.644)
-                              "zoom" 8})]
-        (js/google.maps.Map. map-canvas map-options)))
+        map-options (clj->js {:zoom 3
+                              :mapTypeId google.maps.MapTypeId.ROADMAP
+                              :center (google.maps.LatLng. 59, 18)
+                              :mapTypeControl true
+                              :styles [{:stylers [{:visibility "on"}]}]})]
+        (google.maps.Map. map-canvas map-options)))
+        ;;(js/google.maps.Map. map-canvas map-options)))
 
 (defn map-component []
   (reagent/create-class {:reagent-render map-render
@@ -689,6 +702,7 @@
   (fetch-docs!)
   (hook-browser-navigation!)
   (mount-components)
+  (fetch_getty_images "/getty_images")
 )
 
 

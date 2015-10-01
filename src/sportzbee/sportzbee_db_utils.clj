@@ -4,6 +4,7 @@
   (:require [sportzbee.sportzbee_engine :as reng])
   (:require [datomic.api :as d])
   (:require [datomic.api :only [q db] :as d])
+  (:require [org.httpkit.client :as http])
   (:use [clojure.pprint :as pprint])
 )
 
@@ -188,6 +189,42 @@
     (def results (map #(zipmap [:eid :tourney-name :organiser_name :address :pin :sport :city] %) (reng/find-tourneys conn)))
     (into [] results))
   )
+
+
+(defn xform_image_loc [loc]
+  (timbre/info (:uri (get (:display_sizes loc) 0)))
+  {:uri (:uri (get (:display_sizes loc) 0))}
+)
+
+
+(defn get_image_urls [imgvec]
+  (map #(xform_image_loc  %) imgvec)
+)
+
+(defn download_images [src_token]
+
+  (timbre/info "FETCHING IMAGES from GETTY")
+  ;;(def url "https://api.gettyimages.com:443/v3/search/images?embed_content_only=true&orientations=PanoramicHorizontal&prestige_content_only=true&phrase=")
+  (def url "https://api.gettyimages.com:443/v3/search/images?embed_content_only=true&orientations=Horizontal&phrase=")
+  ;(def getty_url (str "https://api.gettyimages.com:443/v3/search/images/editorial?orientations=PanoramicHorizontal&phrase=" src_token))
+  ;(def getty_url (str "https://api.gettyimages.com:443/v3/search/images/editorial?editorial_segments=sport&embed_content_only=true&graphical_styles=photography&orientations=PanoramicHorizontal&phrase=" src_token))
+  (def getty_url (str url src_token))
+  (let [options {:headers {"Api-Key" "kvvexjcn8hzmffbpq73xmpeu"}}
+      {:keys [status headers body error]} @(http/get getty_url options)]
+    (if error
+      (println "Failed, exception is " error)
+      (get_image_urls (:images (json/read-str body :key-fn keyword))))
+  )
+)
+
+(def todays_images (concat (download_images "football") (download_images "cricket") (download_images "tennis") (download_images "athletics") (download_images "badminton")))
+
+(timbre/info todays_images)
+
+(defn get_images []
+  (json/write-str todays_images)
+)
+
 (defn dbquery []
   (let [conn (d/connect uri)]
     (comment

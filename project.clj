@@ -39,6 +39,7 @@
                  [org.clojure/core.logic "0.8.5"]
                  [com.cemerick/friend "0.2.0"]
                  [org.clojure/data.json "0.2.6"]
+                 [cljsjs/google-maps "3.18-1"]
                  [bk/ring-gzip "0.1.1"]]
 
   :min-lein-version "2.0.0"

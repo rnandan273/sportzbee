@@ -55,13 +55,21 @@
                                             )}
                               :carousel_items {
                                   :items_carousel (list
-                                       {:link-ref "#/login" :src-ref "/img/participate.jpeg" :name-ref "Learn More >>"
+                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS5KkMqUZU3WnvkB4dgNkdtVIjT8rscF_WiRJYYJh8po34czNZ6Rg" :name-ref "Learn More >>"
                                         :headline "Organize Tournaments and Manage them completely"}
-                                       {:link-ref "#/login" :src-ref "/img/list.jpeg" :name-ref "Search >>"
+                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcR42O8I1cpoy6MTSSyA4HE0fmp6iPqaJ941dj5aeAnAsn4vp-gr" :name-ref "Search >>"
                                         :headline "Search and participate in your favourite Sport events" }
-                                       {:link-ref "#/login" :src-ref "/img/record.jpeg" :name-ref "Participate >>"
+                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSS2ieU04J9IhCQyUIV5oWp2tScsmvwIRD5NQWBmfpVgIh6JtmzFg" :name-ref "Participate >>"
                                         :headline "Record Scores and build portfolio, share with friends" }
-                                       {:link-ref "#/login" :src-ref "/img/capture.jpeg" :name-ref "Share >>"
+                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCrfzpdol-vp7JgW-5guo5eLhQSYAWdOhcj9pJnOzA1BfqNPLG" :name-ref "Share >>"
+                                        :headline "Share sport events with your friends" }
+                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqe2g5vtAejH2PeatzHHorQAUDS6utRJ8Z13-zW-SNHRDMyOLe" :name-ref "Learn More >>"
+                                        :headline "Organize Tournaments and Manage them completely"}
+                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtgt0wmSThCSgmhkUQrM0mhUqhXGMthC77437w8i92iYl__iw9" :name-ref "Search >>"
+                                        :headline "Search and participate in your favourite Sport events" }
+                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQU_dRjxGqrzZacy9htPbotEGOvA-7nOYcb8vdS19DeKbRYvwEjtQ" :name-ref "Participate >>"
+                                        :headline "Record Scores and build portfolio, share with friends" }
+                                       {:link-ref "#/login" :src-ref "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTuy1Hxn36qbq73piv_qnUhWdeWse5FfHCfit9l2okFKF0oUxWdKQ" :name-ref "Share >>"
                                         :headline "Share sport events with your friends" })}
                               :services_items {
                                   :items_services (list
@@ -122,6 +130,7 @@
 (def Tabs (reagent/adapt-react-class js/ReactBootstrap.Tabs))
 (def Tab (reagent/adapt-react-class js/ReactBootstrap.Tab))
 
+(def googlemapkey "AIzaSyDUexZHH88EIeKZSS6U-efg0KDMQCZoH3w")
 
 (def read-json (t/reader :json))
 
@@ -259,15 +268,18 @@
     [:div.col-md-12
      "this is the story of sportzbee... work in progress"]]])
 
+(defn home-page_test []
+  [:div {:style {:height "300px"}}])
 
 (defn home-page []
   (fn []
     [:div.container
-     [:div [Carousel {:activeIndex 0 :direction "next"}
+
+     [:div [Carousel
         (for [x (:items_carousel (@app_state :carousel_items))]
           (let [{:keys [src-ref link-ref name-ref :headline]} x]
             [CarouselItem
-            [:img {:width 600 :height 250 :alt "600x250" :src src-ref}]
+            [:img {:width 500 :height 250 :alt "500x250" :src src-ref}]
             [:div {:className "carousel-caption"}
               [:h3 headline]
               [:p [Button {:class "btn-material-light-blue-800" :bsStyle "primary" :href link-ref} name-ref]]]]))]]
@@ -646,6 +658,20 @@
                          :component-did-mount current-page-did-mount
                          :component-did-update current-page-did-update}))
 
+(comment
+(def *map* nil)
+(def my-opts
+   {"zoom"      8
+    "mapTypeId" google.maps.MapTypeId.ROADMAP
+    "center"    (google.maps.LatLng. -34.397, 150.644)})
+
+(defn map-load []
+  (let [elem (.getElementById js/document "map-canvas")]
+     (set! *map* (google.maps.Map. elem (clj->js my-opts)))))
+
+(google.maps.event.addDomListener js/window "load" map-load)
+
+)
 (defn mount-components []
   ;;(reagent/render [#'navbar] (.getElementById js/document "navbar"))
   (reagent/render [#'reactnavbar] (.getElementById js/document "reactnavbar"))

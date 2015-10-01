@@ -11,7 +11,6 @@
             [markdown.core :refer [md->html]]
             [clojure.walk :as walk]
             [cognitect.transit :as t]
-            [google.maps]
             [ajax.core :refer [GET POST]])
   (:import goog.History)
   (:require-macros
@@ -653,8 +652,8 @@
                               :center (google.maps.LatLng. 59, 18)
                               :mapTypeControl true
                               :styles [{:stylers [{:visibility "on"}]}]})]
-        (google.maps.Map. map-canvas map-options)))
-        ;;(js/google.maps.Map. map-canvas map-options)))
+
+        (js/google.maps.Map. map-canvas map-options)))
 
 (defn map-component []
   (reagent/create-class {:reagent-render map-render

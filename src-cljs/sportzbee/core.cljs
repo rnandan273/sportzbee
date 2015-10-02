@@ -280,14 +280,15 @@
 (defn home-page []
   (fn []
     [:div.container
-     [:div [Carousel
+     [:div [Carousel {:controls false :indicators false}
         (for [x (:items_carousel (@app_state :carousel_items))]
           (let [{:keys [src-ref link-ref name-ref :headline]} x]
-            [CarouselItem
+            [CarouselItem {:animateIn true :animateOut true}
             [:img {:width 450 :height 200 :src (get_random_image_url)}]
             [:div {:className "carousel-caption"}
               [:h3 {:style {:font-weight "bold" :color "#1D71B0"}} headline]
-              [:p [Button {:class "btn-material-light-blue-800" :bsSize "xsmall" :bsStyle "primary" :href link-ref} name-ref]]]]))]]
+              [:p [Button {:class "btn-material-light-blue-800" :bsSize "xsmall"
+                           :bsStyle "primary" :href link-ref} name-ref]]]]))]]
 
      [:br]
      [:br]

@@ -55,7 +55,7 @@
                                             )}
                               :carousel_items {
                                   :items_carousel (list
-                                       {:link-ref "#/login" :src-ref "" :name-ref "Learn More >>"
+                                       {:link-ref "#/login" :src-ref "http://www.google.co.in/imgres?imgurl=http://www.listofimages.com/wp-content/uploads/2013/01/steven-gerrard-liverpool-captain-glory-football-player-sports.jpg&imgrefurl=http://www.high-resolution-wallpapers.com/steven-gerrard-liverpool-captain-glory-football-player-sports-165931&h=1600&w=2560&tbnid=iHHKKKNYFIb0hM:&docid=PQOYFDTAPKascM&ei=eYQNVpnqLI-jugSkhoCYDQ&tbm=isch&ved=0CE4QMygkMCRqFQoTCNmKqpX8ocgCFY-RjgodJAMA0w" :name-ref "Learn More >>"
                                         :headline "Organize Tournaments and Manage them completely"}
                                        {:link-ref "#/login" :src-ref "" :name-ref "Search >>"
                                         :headline "Search and participate in your favourite Sport events" }
@@ -284,10 +284,10 @@
         (for [x (:items_carousel (@app_state :carousel_items))]
           (let [{:keys [src-ref link-ref name-ref :headline]} x]
             [CarouselItem
-            [:img {:width 500 :height 150 :alt "500x150" :src (get_random_image_url)}]
+            [:img {:width 450 :height 200 :src (get_random_image_url)}]
             [:div {:className "carousel-caption"}
-              [:h3 headline]
-              [:p [Button {:class "btn-material-light-blue-800" :bsStyle "primary" :href link-ref} name-ref]]]]))]]
+              [:h3 {:style {:font-weight "bold" :color "#1D71B0"}} headline]
+              [:p [Button {:class "btn-material-light-blue-800" :bsSize "xsmall" :bsStyle "primary" :href link-ref} name-ref]]]]))]]
 
      [:br]
      [:br]

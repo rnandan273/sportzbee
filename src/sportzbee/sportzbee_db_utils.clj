@@ -206,11 +206,12 @@
   (timbre/info "FETCHING IMAGES from GETTY")
   ;;(def url "https://api.gettyimages.com:443/v3/search/images?embed_content_only=true&orientations=PanoramicHorizontal&prestige_content_only=true&phrase=")
   (def url "https://api.gettyimages.com:443/v3/search/images?embed_content_only=true&orientations=Horizontal&phrase=")
+  (def url "https://api.gettyimages.com:443/v3/search/images/editorial?editorial_segments=sport&orientations=PanoramicHorizontal")
   ;(def getty_url (str "https://api.gettyimages.com:443/v3/search/images/editorial?orientations=PanoramicHorizontal&phrase=" src_token))
   ;(def getty_url (str "https://api.gettyimages.com:443/v3/search/images/editorial?editorial_segments=sport&embed_content_only=true&graphical_styles=photography&orientations=PanoramicHorizontal&phrase=" src_token))
   (def getty_url (str url src_token))
   (let [options {:headers {"Api-Key" "kvvexjcn8hzmffbpq73xmpeu"}}
-      {:keys [status headers body error]} @(http/get getty_url options)]
+      {:keys [status headers body error]} @(http/get url options)]
     (if error
       (println "Failed, exception is " error)
       (get_image_urls (:images (json/read-str body :key-fn keyword))))

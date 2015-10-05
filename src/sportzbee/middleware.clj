@@ -70,5 +70,4 @@
             (assoc-in [:security :anti-forgery] false)
             (dissoc :session)))
       wrap-context
-      wrap-internal-error
-      (wrap-gzip)))
+      wrap-internal-error))

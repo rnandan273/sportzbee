@@ -217,7 +217,7 @@
       (get_image_urls (:images (json/read-str body :key-fn keyword))))
   )
 )
-
+(comment)
 (def todays_images (concat (download_images "football") (download_images "cricket") (download_images "tennis") (download_images "athletics") (download_images "badminton")))
 
 (timbre/info todays_images)
@@ -225,6 +225,7 @@
 (defn get_images []
   (json/write-str todays_images)
 )
+
 
 (defn dbquery []
   (let [conn (d/connect uri)]

@@ -2,6 +2,7 @@
   (:require [sportzbee.layout :as layout]
             [compojure.core :refer [defroutes GET POST]]
             [sportzbee.datomic_utils :as dq]
+            [sportzbee.ml_utils :as ml]
             [sportzbee.sportzbee_db_utils :as sbu]
             [sportzbee.usergrid_utils :as ug]
             [sportzbee.oauth_utils :as oa]
@@ -50,6 +51,7 @@
                           (= (:op (:params req)) "query") (ok (sbu/dbquery))
                           (= (:op (:params req)) "seed") (ok (sbu/dbseed))))
   (GET "/listed_events" []
+       (ml/test_config)
        (ok (sbu/get_tourneys)))
 
   (GET "/getty_images" []

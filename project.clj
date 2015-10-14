@@ -40,7 +40,9 @@
                  [com.cemerick/friend "0.2.0"]
                  [org.clojure/data.json "0.2.6"]
                  [cljsjs/google-maps "3.18-1"]
-                 [bk/ring-gzip "0.1.1"]]
+                 [bk/ring-gzip "0.1.1"]
+                 [org.clojure/data.csv "0.1.3"]
+                 [cc.artifice/clj-ml "0.4.0"]]
 
   :min-lein-version "2.0.0"
   :uberjar-name "sportzbee.jar"

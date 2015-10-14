@@ -648,13 +648,22 @@
 
 (defn map-did-mount [this]
   (let [map-canvas (reagent/dom-node this)
-        map-options (clj->js {:zoom 3
+        map-options (clj->js {:zoom 5
                               :mapTypeId google.maps.MapTypeId.ROADMAP
-                              :center (google.maps.LatLng. 59, 18)
+                              :center (google.maps.LatLng. 12.97, 77.59)
                               :mapTypeControl true
-                              :styles [{:stylers [{:visibility "on"}]}]})]
+                              :styles [{:stylers [{:visibility "on"}]}]})
+        map-drawn  (js/google.maps.Map. map-canvas map-options)
+        marker-options (clj->js {:position (google.maps.LatLng. 12.97, 77.59)
+                             :title "Hello Event"})
+        marker-options2 (clj->js {:position (google.maps.LatLng. 14.97, 78.59)
+                             :title "Hello Event2"})]
+        (.setMap (js/google.maps.Marker. marker-options) map-drawn)
+        (.setMap (js/google.maps.Marker. marker-options2) map-drawn)))
 
-        (js/google.maps.Map. map-canvas map-options)))
+
+        ;;(.setMap (js/google.maps.Marker. map-marker2) (js/google.maps.Map. map-canvas map-options))))
+       ;;(.setMap (js/google.maps.Marker. map-marker map-drawn))))
 
 (defn map-component []
   (reagent/create-class {:reagent-render map-render

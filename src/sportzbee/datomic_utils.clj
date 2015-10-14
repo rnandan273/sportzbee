@@ -4,6 +4,8 @@
   (:require [sportzbee.reco_engine :as reng])
   (:require [datomic.api :as d])
   (:require [datomic.api :only [q db] :as d])
+  (:require [clojure.data.csv :as csv])
+  (:require [clojure.java.io :as io])
   (:use [clojure.pprint :as pprint])
 )
 
@@ -113,3 +115,29 @@
   (let [conn (d/connect uri)]
   (timbre/info (reng/find-all-styles conn))
   (timbre/info (reng/find-all-products conn))))
+
+(defn importcsv []
+  (timbre/info "Importing bloomingdale inventory")
+  (with-open [in-file (io/reader "/Users/raghu/work/projects/clojure/luminus_sportz/sportzbee/resources/reco/inventory.csv")]
+  (doall
+    (csv/read-csv in-file))
+  ))
+
+(defn mapproduct [x]
+  {:id (get x 0) :title (get x 1) :type (get x 2)
+   :style_type (get x 3) :product_url (get x 4) :descr (get x 5)
+   :color (get x 6) :size (get x 7) :keywords (get x 8) :image_name (get x 9)})
+
+(defn importproducts []
+  (->> (importcsv)
+       (map mapproduct))
+  )
+
+(defn insertproducts []
+  (let [conn (d/connect uri)]
+    (loop [list_x (importproducts)]
+      (when (> (count list_x) 0)
+        ;;(cond
+         ;;(= product_type "tops")(reng/add-product-top conn (first list_x))
+        (println "Item ->" (:type (first list_x)))
+        (recur (rest list_x))))))

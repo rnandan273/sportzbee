@@ -244,36 +244,36 @@
 (comment)
 (def todays_images (concat (download_images "football") (download_images "cricket") (download_images "tennis") (download_images "athletics") (download_images "badminton")))
 
-;(timbre/info todays_images)
+(timbre/info todays_images)
 
 (defn get_images []
-;(json/write-str todays_images)
+(json/write-str todays_images)
 )
 
 (defn fetch_images [query_chan]
   (go (timbre/info "sleeping...")
-        (Thread/sleep (rand-int 5000))
+        ;(Thread/sleep (rand-int 5000))
         (>! query_chan (get_images))
     )
 )
 
 (defn search_events_by_sport [query_chan sport]
-  (go (timbre/info "sleeping...")
-        (Thread/sleep (rand-int 5000))
+  (go (timbre/info "querying by sport...")
+        ;(Thread/sleep (rand-int 5000))
         (>! query_chan (get_tourneys_by_sport sport))
     )
 )
 
 (defn search_events_by_city [query_chan city]
-  (go (timbre/info "sleeping...")
-        (Thread/sleep (rand-int 5000))
+  (go (timbre/info "querying by city...")
+        ;(Thread/sleep (rand-int 5000))
         (>! query_chan (get_tourneys_by_city city))
     )
 )
 
 (defn search_events_by_pin [query_chan pin]
-  (go (timbre/info "sleeping...")
-        (Thread/sleep (rand-int 5000))
+  (go (timbre/info "querying by pin...")
+        ;(Thread/sleep (rand-int 5000))
         (>! query_chan (get_tourneys_by_pin pin))
     )
 )
@@ -282,7 +282,7 @@
 (defn async_query []
   (let [query_chan (chan)]
     (go (timbre/info "sleeping...")
-        (Thread/sleep (rand-int 5000))
+        ;(Thread/sleep (rand-int 5000))
         (>! query_chan (get_images))
     )
     query_chan)

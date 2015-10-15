@@ -9,10 +9,11 @@
             [ring.util.http-response :refer [ok found]]
             [taoensso.timbre :as timbre]
             [clojure.java.io :as io]
+            [clojure.set :refer [union]]
             [clojure.core.async
              :as a
              :refer [>! <! >!! <!! go chan buffer close! thread
-                     alts! alts!! timeout]]))
+                     alts! alts!! alt!! timeout]]))
 
 (defn home-page []
   (layout/render "home.html"))
@@ -66,37 +67,42 @@
 
   (GET "/multisearch" []
 
-    (let [query_chan (chan)
-          query_chan1 (chan)
-          query_chan2 (chan)]
+    (let [ch1 (chan)
+          ch2 (chan)
+          ch3 (chan)]
 
-    (sbu/fetch_images query_chan)
+    (sbu/fetch_images ch1)
 
-    (sbu/fetch_images query_chan1)
+    (sbu/fetch_images ch2)
 
-    (sbu/fetch_images query_chan2)
+    (sbu/fetch_images ch3)
 
-      (let [[query_response channel] (alts!! [query_chan query_chan1 query_chan2])]
+      (let [[query_response channel] (alts!! [ch1 ch2 ch3])]
        (timbre/info "Response from ALTS!!!")
        (ok query_response))))
 
 
-  (GET "/randomsearch" []
+  (GET "/randomsearch" req
 
-    (let [query_chan (chan)
-          query_chan1 (chan)
-          query_chan2 (chan)]
+    (let [ch1 (chan)
+          ch2 (chan)
+          ch3 (chan)
+          fp (:fp (:params req))]
+      (timbre/info "filter is " fp)
 
-    (sbu/search_events_by_sport query_chan "cricket")
+    (sbu/search_events_by_sport ch1 fp)
 
-    (sbu/search_events_by_city query_chan1 "bangalore")
+    (sbu/search_events_by_city ch2 fp)
 
-    (sbu/search_events_by_pin query_chan2 "560065")
+    (sbu/search_events_by_pin ch3 fp)
 
-      (let [[query_response channel] (alts!! [query_chan query_chan1 query_chan2])]
-       (timbre/info "Response from ALTS!!!")
-       (ok query_response))))
+      (let [res1 (into #{} (<!! ch1))
+            res2 (into #{} (<!! ch2))
+            res3 (into #{} (<!! ch3))]
+      (ok (into [] (union  res1 res2 res3))))
+     )
 
+  )
   )
 
 

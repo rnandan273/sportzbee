@@ -518,8 +518,9 @@
 
 (defn search_entry [entry]
   (log (str "Search : " entry))
-  (def service_url (str "/listed_events"))
-  (log (str "Get events" service_url))
+  (def service_url1 (str "/listed_events"))
+  (def service_url (str "/randomsearch?fp=" entry))
+  (log (str "GET EVENTS" service_url))
   (go
      (read-service-response (<! (do-http-get service_url)))
   )

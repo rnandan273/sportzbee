@@ -324,7 +324,7 @@
 (defn search-events-details []
      [:div
      [:section  [:h4 "Search Events"]
-      [Input {:type "text" :bsSize "medium" :placeholder "Enter event name or address "
+      [Input {:type "text" :bsSize "medium" :placeholder "Enter sport name or pin or city "
             :onChange #(search_entry (-> % .-target .-value))}]]
       [:section [:h4 "Search Results"]
       [Accordion

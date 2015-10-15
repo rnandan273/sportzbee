@@ -5,6 +5,10 @@
   (:require [datomic.api :as d])
   (:require [datomic.api :only [q db] :as d])
   (:require [org.httpkit.client :as http])
+  (:require [clojure.core.async
+             :as a
+             :refer [>! <! >!! <!! go chan buffer close! thread
+                     alts! alts!! timeout]])
   (:use [clojure.pprint :as pprint])
 )
 
@@ -50,10 +54,10 @@
 (defn dblist []
   (listdbs))
 
-(def persons (map #(zipmap [:person-name :age :address :phone :morf :sports :likes] %) [["raghu" 42 "Iskcon Gokulam Bangalore" "9886615961" "male" "cricket" "football"]
-                                                                                ["anand" 42 "Aundh Pune" "9845272298" "male" "cricket" "tennis"]
-                                                                                ["ramesh" 43 "Basaveshwarnagar Bangalore" "9886615962" "male" "cricket" "tt"]
-                                                                                ["prakash" 42 "Nandini layout Bangalore" "9886615963" "male" "cricket" "baseball"]]))
+(def persons (map #(zipmap [:person-name :age :address :phone :email :morf :sports :likes] %) [["raghu" 42 "Iskcon Gokulam Bangalore" "9886615961" "raghu@gmail.com" "male" "cricket" "football"]
+                                                                                ["anand" 42 "Aundh Pune" "9845272298" "anand@gmail.com" "male" "cricket" "tennis"]
+                                                                                ["ramesh" 43 "Basaveshwarnagar Bangalore" "9886615962" "ramesh@gmail.com" "male" "cricket" "tt"]
+                                                                                ["prakash" 42 "Nandini layout Bangalore" "9886615963" "prakash@gmail.com" "male" "cricket" "baseball"]]))
 (defn addpersons [persons]
   (let [conn (d/connect uri)]
     (loop [lx persons]
@@ -174,6 +178,8 @@
   (addmatches matches)
   (addscores scores)
 )
+
+
 (defn get_tourneys []
   (let [conn (d/connect uri)]
   (comment
@@ -223,13 +229,31 @@
 (timbre/info todays_images)
 
 (defn get_images []
-  (json/write-str todays_images)
+(json/write-str todays_images)
+)
+
+(defn fetch_images [query_chan]
+  (go (timbre/info "sleeping...")
+        (Thread/sleep (rand-int 5000))
+        (>! query_chan (get_images))
+    )
+)
+
+
+(defn async_query []
+  (let [query_chan (chan)]
+    (go (timbre/info "sleeping...")
+        (Thread/sleep (rand-int 5000))
+        (>! query_chan (get_images))
+    )
+    query_chan)
 )
 
 
 (defn dbquery []
+  (comment
   (let [conn (d/connect uri)]
-    (comment
+
     (timbre/info (reng/find-persons conn))
     (timbre/info (reng/find-person-eid conn "raghu"))
 
@@ -237,9 +261,6 @@
     (timbre/info (reng/find-sport-eid conn "tennis"))
 
     (timbre/info (reng/find-roles conn))
-    (timbre/info (reng/find-role-eid conn "coach"))
-
-    )
-
+    (timbre/info (reng/find-role-eid conn "coach")))
   )
 )

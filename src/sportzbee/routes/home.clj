@@ -8,7 +8,11 @@
             [sportzbee.oauth_utils :as oa]
             [ring.util.http-response :refer [ok found]]
             [taoensso.timbre :as timbre]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.core.async
+             :as a
+             :refer [>! <! >!! <!! go chan buffer close! thread
+                     alts! alts!! timeout]]))
 
 (defn home-page []
   (layout/render "home.html"))
@@ -56,6 +60,25 @@
 
   (GET "/getty_images" []
        (ok (sbu/get_images)))
+
+
+  (GET "/search" [] (ok (<!! (sbu/async_query))))
+
+  (GET "/multisearch" []
+
+    (let [query_chan (chan)
+          query_chan1 (chan)
+          query_chan2 (chan)]
+
+    (sbu/fetch_images query_chan)
+
+    (sbu/fetch_images query_chan1)
+
+    (sbu/fetch_images query_chan2)
+
+      (let [[query_response channel] (alts!! [query_chan query_chan1 query_chan2])]
+       (timbre/info "Response from ALTS!!!")
+       (ok query_response))))
 
   )
 

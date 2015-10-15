@@ -15,6 +15,7 @@
                       :person/age (:age person_obj)
                       :person/address (:address person_obj)
                       :person/phone (:phone person_obj)
+                      :person/email (:email person_obj)
                       :person/sex (:morf person_obj)
                       :person/sports (:sports person_obj)
                       :person/likes (:likes person_obj)
@@ -25,6 +26,7 @@
                       :person/age (:age person_obj)
                       :person/address (:address person_obj)
                       :person/phone (:phone person_obj)
+                      :person/email (:email person_obj)
                       :person/sex (:morf person_obj)
                       :person/sports (:sports person_obj)
                       :person/likes (:likes person_obj)
@@ -244,3 +246,13 @@
                        :score/log (:log score_obj)
                        :score/comments (:comments score_obj)}]))
   )
+
+;; query scores
+(defn find-score-log [conn match_name]
+  (d/q '[:find ?eid ?score_log
+         :in $
+         :where [?eid :score/match ?match_ref]
+                [?match_ref :match/name ?match_name]
+                [?eid :score/log ?score_log]]
+       (d/db conn)
+       match_name))

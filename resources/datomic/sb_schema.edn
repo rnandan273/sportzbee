@@ -36,6 +36,13 @@
  :db.install/_attribute :db.part/db}
 
  {:db/id #db/id[:db.part/db]
+ :db/ident :person/email
+ :db/valueType :db.type/string
+ :db/cardinality :db.cardinality/many
+ :db/doc "persons email address"
+ :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
  :db/ident :person/sex
  :db/valueType :db.type/string
  :db/cardinality :db.cardinality/one

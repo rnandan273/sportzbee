@@ -145,6 +145,48 @@
                 [?eid :tourney/city ?city]]
        (d/db conn)))
 
+(defn find-tourneys-by-sport [conn sport_name]
+  (d/q '[:find ?eid ?a_name ?organiser ?address ?pin ?sport_name ?city
+         :in $ ?sport_name
+         :where [?eid :tourney/name ?a_name]
+                [?eid :tourney/organiser ?org_ref]
+                [?org_ref :person/name ?organiser]
+                [?eid :tourney/address ?address]
+                [?eid :tourney/pin ?pin]
+                [?eid :tourney/sport ?sport_ref]
+                [?sport_ref :sport/name ?sport_name]
+                [?eid :tourney/city ?city]]
+       (d/db conn)
+       sport_name))
+
+(defn find-tourneys-by-pin [conn pin]
+  (d/q '[:find ?eid ?a_name ?organiser ?address ?pin ?sport_name ?city
+         :in $ ?pin
+         :where [?eid :tourney/name ?a_name]
+                [?eid :tourney/organiser ?org_ref]
+                [?org_ref :person/name ?organiser]
+                [?eid :tourney/address ?address]
+                [?eid :tourney/pin ?pin]
+                [?eid :tourney/sport ?sport_ref]
+                [?sport_ref :sport/name ?sport_name]
+                [?eid :tourney/city ?city]]
+       (d/db conn)
+       pin))
+
+(defn find-tourneys-by-city [conn city]
+  (d/q '[:find ?eid ?a_name ?organiser ?address ?pin ?sport_name ?city
+         :in $ ?city
+         :where [?eid :tourney/name ?a_name]
+                [?eid :tourney/organiser ?org_ref]
+                [?org_ref :person/name ?organiser]
+                [?eid :tourney/address ?address]
+                [?eid :tourney/pin ?pin]
+                [?eid :tourney/sport ?sport_ref]
+                [?sport_ref :sport/name ?sport_name]
+                [?eid :tourney/city ?city]]
+       (d/db conn)
+       city))
+
 ;;add team
 (defn add-team [conn team_obj]
 

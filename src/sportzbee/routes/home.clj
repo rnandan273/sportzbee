@@ -80,6 +80,23 @@
        (timbre/info "Response from ALTS!!!")
        (ok query_response))))
 
+
+  (GET "/randomsearch" []
+
+    (let [query_chan (chan)
+          query_chan1 (chan)
+          query_chan2 (chan)]
+
+    (sbu/search_events_by_sport query_chan "cricket")
+
+    (sbu/search_events_by_city query_chan1 "bangalore")
+
+    (sbu/search_events_by_pin query_chan2 "560065")
+
+      (let [[query_response channel] (alts!! [query_chan query_chan1 query_chan2])]
+       (timbre/info "Response from ALTS!!!")
+       (ok query_response))))
+
   )
 
 

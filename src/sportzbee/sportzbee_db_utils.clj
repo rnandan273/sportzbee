@@ -196,6 +196,24 @@
     (into [] results))
   )
 
+(defn get_tourneys_by_sport [sport_name]
+  (let [conn (d/connect uri)]
+    (def results (map #(zipmap [:eid :tourney-name :organiser_name :address :pin :sport :city] %) (reng/find-tourneys-by-sport conn sport_name)))
+    (into [] results))
+  )
+
+(defn get_tourneys_by_pin [pin]
+  (let [conn (d/connect uri)]
+    (def results (map #(zipmap [:eid :tourney-name :organiser_name :address :pin :sport :city] %) (reng/find-tourneys-by-pin conn pin)))
+    (into [] results))
+  )
+
+(defn get_tourneys_by_city [city]
+  (let [conn (d/connect uri)]
+    (def results (map #(zipmap [:eid :tourney-name :organiser_name :address :pin :sport :city] %) (reng/find-tourneys-by-city conn city)))
+    (into [] results))
+  )
+
 
 (defn xform_image_loc [loc]
   (timbre/info (:uri (get (:display_sizes loc) 0)))
@@ -226,16 +244,37 @@
 (comment)
 (def todays_images (concat (download_images "football") (download_images "cricket") (download_images "tennis") (download_images "athletics") (download_images "badminton")))
 
-(timbre/info todays_images)
+;(timbre/info todays_images)
 
 (defn get_images []
-(json/write-str todays_images)
+;(json/write-str todays_images)
 )
 
 (defn fetch_images [query_chan]
   (go (timbre/info "sleeping...")
         (Thread/sleep (rand-int 5000))
         (>! query_chan (get_images))
+    )
+)
+
+(defn search_events_by_sport [query_chan sport]
+  (go (timbre/info "sleeping...")
+        (Thread/sleep (rand-int 5000))
+        (>! query_chan (get_tourneys_by_sport sport))
+    )
+)
+
+(defn search_events_by_city [query_chan city]
+  (go (timbre/info "sleeping...")
+        (Thread/sleep (rand-int 5000))
+        (>! query_chan (get_tourneys_by_city city))
+    )
+)
+
+(defn search_events_by_pin [query_chan pin]
+  (go (timbre/info "sleeping...")
+        (Thread/sleep (rand-int 5000))
+        (>! query_chan (get_tourneys_by_pin pin))
     )
 )
 
@@ -263,4 +302,8 @@
     (timbre/info (reng/find-roles conn))
     (timbre/info (reng/find-role-eid conn "coach")))
   )
+  (timbre/info "All" (get_tourneys))
+  (timbre/info "By sport" (get_tourneys_by_sport "cricket"))
+  (timbre/info "By Pin" (get_tourneys_by_pin "560065"))
+  (timbre/info "By city" (get_tourneys_by_city "chennai"))
 )

@@ -104,5 +104,8 @@
    :project/test {:env {:test       true
                         :port       3001
                         :nrepl-port 7001}}
+   :repositories {"my.datomic.com" {:url "https://my.datomic.com/repo"
+                                 :username "raghu.sk@gmail.com"
+                      :password "68600bf7-cc9c-4062-8c90-386c78034630"}}
    :profiles/dev {}
    :profiles/test {}})

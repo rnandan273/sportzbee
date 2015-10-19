@@ -2,6 +2,9 @@
 
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
+  :repositories {"my.datomic.com" {:url "https://my.datomic.com/repo"
+                                 :username ~(System/getenv "DATOMIC_EMAIL")
+                      :password ~(System/getenv "DATOMIC_KEY")}}
 
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [selmer "0.9.2"]
@@ -35,8 +38,8 @@
                  [org.immutant/web "2.1.0"]
                  [com.cognitect/transit-cljs "0.8.205"]
                  [org.clojure/core.memoize "0.5.6"]
-                [com.datomic/datomic-free "0.9.5153"  :exclusions [joda-time]]
-                ; [com.datomic/datomic-pro "0.9.5302" :exclusions [joda-time]]
+                ;[com.datomic/datomic-free "0.9.5153"  :exclusions [joda-time]]
+                 [com.datomic/datomic-pro "0.9.5302" :exclusions [joda-time]]
                  [org.clojure/core.logic "0.8.5"]
                  [com.cemerick/friend "0.2.0"]
                  [org.clojure/data.json "0.2.6"]

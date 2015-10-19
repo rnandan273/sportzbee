@@ -104,6 +104,7 @@
    :project/test {:env {:test       true
                         :port       3001
                         :nrepl-port 7001}}
+
    :repositories {"my.datomic.com" {:url "https://my.datomic.com/repo"
                                  :username ~(System/getenv "DATOMIC_EMAIL")
                       :password ~(System/getenv "DATOMIC_KEY")}}

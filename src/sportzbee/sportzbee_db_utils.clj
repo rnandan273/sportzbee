@@ -13,7 +13,7 @@
 )
 
 ;;(def uri "datomic:free://localhost:4334/sportzbee")
-;(def uri "datomic:mem://sportzbee-db")
+;;(def uri "datomic:mem://sportzbee-db")
 ;(def sportzbeedb (d/create-database "datomic:mem://sportzbee-db"))
 ;;(def uri "datomic:ddb://us-east-1/datomic-test/datomic-test-db?aws_secret_key=QGf0q2Gk0NbnLtdJokq7uhgfBpbR1xSM08YTIbQX&aws_access_key_id=AKIAJAHZUGNTLVQBYYPA")
 ;;
@@ -23,7 +23,7 @@
 
 (defn listdbs []
  ;; (timbre/info "EXISTING dbs" (d/get-database-names "datomic:free://localhost:4334/*")))
- ;; (timbre/info "EXISTING dbs" (d/get-database-names "datomic:mem://*")))
+  ;(timbre/info "EXISTING dbs" (d/get-database-names "datomic:mem://*")))
  ;; (timbre/info "EXISTING dbs" (d/get-database-names "datomic:free://52.24.45.206:4334/*")))
  ;; (timbre/info "EXISTING dbs" (d/get-database-names "datomic:ddb://us-east-1/datomic-test/*")))
   (timbre/info "EXISTING dbs" (d/get-database-names "datomic:ddb://ap-southeast-1/datomic-test/*")))

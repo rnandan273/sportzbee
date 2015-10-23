@@ -320,16 +320,17 @@
        [Panel {:bsStyle "primary" :header "Event - 3" :eventKey "5"} [register-event]]
        [Panel {:bsStyle "primary" :header "Event - 4" :eventKey "6"} [register-event]]]]]
 )
-
+(def x 0)
 (defn search-events-details []
-     [:div
+    [:div
      [:section  [:h4 "Search Events"]
       [Input {:type "text" :bsSize "medium" :placeholder "Enter sport name or pin or city "
             :onChange #(search_entry (-> % .-target .-value))}]]
       [:section [:h4 "Search Results"]
-      [Accordion
-       (for [elem (into [] (@app_state :list_events))]
-       [Panel {:bsStyle "primary" :header (:item_value (first elem)) :eventKey "3"} [favourite-event elem]])]]]
+        [Accordion
+         (map-indexed (fn [idx itm]
+          [Panel {:bsStyle "primary" :header (:item_value (first itm)) :eventKey idx} [favourite-event itm]])
+              (into [] (@app_state :list_events)))]]]
 )
 
 (defn participate-events-details []
@@ -339,8 +340,9 @@
             :onChange #(search_entry (-> % .-target .-value))}]]
       [:section [:h4 "Search Results"]
       [Accordion
-       (for [elem (into [] (@app_state :list_events))]
-       [Panel {:bsStyle "primary" :header (:item_value (first elem)) :eventKey "3"} [add-event elem]])]]]
+         (map-indexed (fn [idx itm]
+          [Panel {:bsStyle "primary" :header (:item_value (first itm)) :eventKey idx} [add-event itm]])
+              (into [] (@app_state :list_events)))]]]
 )
 
 (defn details-page []

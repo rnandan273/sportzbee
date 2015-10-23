@@ -371,30 +371,34 @@
     (fn []
       [:form  {:className "form-horizontal"}
        [Grid
-        [Row [Col {:mdOffset 3 :md 9 :xsOffset 2 :xs 10 }[:h2 "Welcome , Login"]]]
-
-        [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                :type "text" :bsSize "small" :label "Username" :placeholder "Enter text"
-                :onChange #(swap! login_doc assoc-in [:user-name] (-> % .-target .-value))}]
-
-        [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                :type "password" :bsSize "small" :label "Password" :placeholder "Enter password"
-                :onChange #(swap! login_doc assoc-in [:passwd] (-> % .-target .-value))}]
-
-        [Input {:mdOffset 4 :xsOffset 2 :labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
-                :type "email" :bsSize "small" :label "Email Address" :placeholder "Enter email"}]
         [Row
-         [Col {:mdOffset 2 :md 2 :xsOffset 2 :xs 2 }
-          [ButtonInput {:class "btn-material-light-blue-800" :type "reset" :bsStyle "primary" :value "Reset"}]
+         [Col {:mdOffset 1 :xsOffset 1 :md 11 :xs 11} [:h2 "Welcome , Login"]
+           [Col {:md 9 :xs 9}
+            [Row
+              [Input {:labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
+                      :type "text" :bsSize "small" :label "Username" :placeholder "Enter text"
+                    :onChange #(swap! login_doc assoc-in [:user-name] (-> % .-target .-value))}]]
+            [Row
+               [Input {:labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
+                      :type "password" :bsSize "small" :label "Password" :placeholder "Enter password"
+                      :onChange #(swap! login_doc assoc-in [:passwd] (-> % .-target .-value))}]]
+            [Row
+               [Input {:labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
+                      :type "email" :bsSize "small" :label "Email Address" :placeholder "Enter email"
+                       :onChange #(swap! login_doc assoc-in [:passwd] (-> % .-target .-value))}]]
+
+            [Row [Col {:md 1 :xs 1}
+              [ButtonInput { :class "btn-material-light-blue-800" :type "reset" :bsSize "small" :bsStyle "primary" :value "Reset"}]
+              ]
+             [Col {:mdOffset 2 :xsOffset 2 :md 1 :xs 1}
+              [ButtonInput {:class "btn-material-light-blue-800" :type "submit" :bsSize "small"  :bsStyle "primary" :value "Login" :onClick #(user-login-click @login_doc)}]
+              ]
+             ]
           ]
-         [Col {:md 2 :xs 2 }
-          [ButtonInput {:class "btn-material-light-blue-800" :type "submit" :bsStyle "primary" :value "Login" :onClick #(user-login-click @login_doc)}]
-          ]
-         [Col {:md 2 :xs 2}
-          [Button {:type "submit" :bsStyle "primary" :href "/syncfb" :onClick #(true)} "LoginFB"]
-          ]
-         [Col {:md 2 :xs 2 }
-          [Button {:class "btn-material-light-blue-800" :bsStyle "primary" :href "#/register"} "Register"]]]]])))
+
+         [Col {:mdOffset 1 :xsOffset 1} [:h2 "New User"]]
+            [Button {:class "btn-material-light-blue-800" :bsSize "small" :bsStyle "primary" :href "#/register"} "Register"]
+         ]]]])))
 
 (def url_list {:usertoken1
                  (fn [username password]

@@ -48,7 +48,8 @@
                                             {:link-ref "#/" :evt-key 1 :name-ref "Home"}
                                             {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
                                             {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
-                                            {:link-ref "/syncfb" :evt-key 4 :name-ref "LoginFB"})
+                                            {:link-ref "#/register" :evt-key 4 :name-ref "Register"}
+                                            {:link-ref "/syncfb" :evt-key 5 :name-ref "LoginFB"})
                                    :items_support (list
                                             {:link-ref "#/login" :evt-key 1 :name-ref "Login"}
                                             {:link-ref "#/register" :evt-key 2 :name-ref "Register"}
@@ -146,6 +147,8 @@
 (def CarouselItem (reagent/adapt-react-class js/ReactBootstrap.CarouselItem))
 (def Tabs (reagent/adapt-react-class js/ReactBootstrap.Tabs))
 (def Tab (reagent/adapt-react-class js/ReactBootstrap.Tab))
+(def Pager (reagent/adapt-react-class js/ReactBootstrap.Pager))
+(def PageItem (reagent/adapt-react-class js/ReactBootstrap.PageItem))
 
 (def googlemapkey "AIzaSyDUexZHH88EIeKZSS6U-efg0KDMQCZoH3w")
 
@@ -289,12 +292,19 @@
               [:h3 {:style {:font-weight "bold" :color "#1D71B0"}} headline]
               [:p [Button {:class "btn-material-light-blue-800" :bsSize "xsmall"
                            :bsStyle "primary" :href link-ref} name-ref]]]]))]]
+     [:div [Grid {:fluid false}
+            [Col {:xs 9 :md 6} [search-events-details]
+             [Pager {:disabled false}
+                [PageItem {:previous true :href "#"} "Previous"]
+                [PageItem {:next true :href "#"}"Next"]
+              ]]
+            [Col {:xs 9 :md 6}[:br]
+                 [:br]
+                 [map-component]
+                 [:br]
+                 [:br]]
+            ]]
 
-     [:br]
-     [:br]
-     [map-component]
-     [:br]
-     [:br]
 
      [:div
       [Grid {:fluid true}
@@ -372,8 +382,8 @@
       [:form  {:className "form-horizontal"}
        [Grid
         [Row
-         [Col {:mdOffset 1 :xsOffset 1 :md 11 :xs 11} [:h2 "Welcome , Login"]
-           [Col {:md 9 :xs 9}
+         [Col {:mdOffset 3 :xsOffset 2 :md 9 :xs 16} [:h2 "Welcome , Login"]
+           [Col {:md 10 :xs 14}
             [Row
               [Input {:labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
                       :type "text" :bsSize "small" :label "Username" :placeholder "Enter text"
@@ -387,18 +397,16 @@
                       :type "email" :bsSize "small" :label "Email Address" :placeholder "Enter email"
                        :onChange #(swap! login_doc assoc-in [:passwd] (-> % .-target .-value))}]]
 
-            [Row [Col {:md 1 :xs 1}
+            [Row
+             [Col {:md 3 :xs 6}
               [ButtonInput { :class "btn-material-light-blue-800" :type "reset" :bsSize "small" :bsStyle "primary" :value "Reset"}]
               ]
-             [Col {:mdOffset 2 :xsOffset 2 :md 1 :xs 1}
+             [Col {:md 3 :xs 6}
               [ButtonInput {:class "btn-material-light-blue-800" :type "submit" :bsSize "small"  :bsStyle "primary" :value "Login" :onClick #(user-login-click @login_doc)}]
-              ]
-             ]
+              ]]
           ]
 
-         [Col {:mdOffset 1 :xsOffset 1} [:h2 "New User"]]
-            [Button {:class "btn-material-light-blue-800" :bsSize "small" :bsStyle "primary" :href "#/register"} "Register"]
-         ]]]])))
+           ]]]])))
 
 (def url_list {:usertoken1
                  (fn [username password]
@@ -612,7 +620,8 @@
          (list {:link-ref "#/" :evt-key 1 :name-ref "Home"}
                {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
                {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
-               {:link-ref "/syncfb" :evt-key 3 :name-ref "LoginFB"})))
+               {:link-ref "#/register" :evt-key 4 :name-ref "Register"}
+               {:link-ref "/syncfb" :evt-key 5 :name-ref "LoginFB"})))
   )
 
 (defn redirect_handle_page_load[]
@@ -631,7 +640,8 @@
          (list {:link-ref "#/" :evt-key 1 :name-ref "Home"}
                {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
                {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
-               {:link-ref "/syncfb" :evt-key 4 :name-ref "LoginFB"}))))
+               {:link-ref "#/register" :evt-key 4 :name-ref "Register"}
+               {:link-ref "/syncfb" :evt-key 5 :name-ref "LoginFB"}))))
 
 )
 

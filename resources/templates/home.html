@@ -4,6 +4,17 @@
       <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>Welcome to sportzbee</title>
+      {% style "/css/bootstrap.min.css" %}
+    {% style "/css/bootstrap-theme.min.css" %}
+    {% style "/css/ripples.min.css" %}
+    {% style "/css/material.min.css" %}
+    {% style "/css/material-fullpalette.min.css" %}
+
+
+    {% script "/js/jquery.min.js" %}
+    {% script "/bootstrap-3.3.5/js/bootstrap.min.js" %}
+    {% script "/js/material.min.js" %}
+    {% script "/js/ripples.min.js" %}
     </head>
   <body style="background-color:#E3F2FD">
     <div id="reactnavbar"></div>
@@ -26,28 +37,6 @@
     <div id="footer"></div>
 
     {% style "/css/screen.css" %}
-
-    <!-- scripts and styles-->
-
-    {% style "/css/bootstrap.min.css" %}
-    {% style "/css/bootstrap-theme.min.css" %}
-    {% style "/css/ripples.min.css" %}
-    {% style "/css/material.min.css" %}
-    {% style "/css/material-fullpalette.min.css" %}
-
-
-    {% script "/js/jquery.min.js" %}
-    {% script "/bootstrap-3.3.5/js/bootstrap.min.js" %}
-    {% script "/js/material.min.js" %}
-    {% script "/js/ripples.min.js" %}
-
-
-     <!--
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/material.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/ripples.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    -->
      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUexZHH88EIeKZSS6U-efg0KDMQCZoH3w"></script>
      <script type="text/javascript">
         var context = "{{servlet-context}}";

@@ -8,7 +8,6 @@
 (def conn nil)
 
 ;;add person
-
 (defn add-person [conn person_obj]
   (timbre/info "Adding Person -> " {
                       :person/name (:person-name person_obj)
@@ -30,7 +29,8 @@
                       :person/sex (:morf person_obj)
                       :person/sports (:sports person_obj)
                       :person/likes (:likes person_obj)
-                      }]))
+                      }])
+  )
 
 ;;queries
 (defn find-person-eid [conn person-name]

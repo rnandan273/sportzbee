@@ -13,7 +13,7 @@
 )
 
 ;;(def uri "datomic:free://localhost:4334/sportzbee")
-;;(def uri "datomic:mem://sportzbee-db")
+;(def uri "datomic:mem://sportzbee-db")
 ;(def sportzbeedb (d/create-database "datomic:mem://sportzbee-db"))
 ;;(def uri "datomic:ddb://us-east-1/datomic-test/datomic-test-db?aws_secret_key=QGf0q2Gk0NbnLtdJokq7uhgfBpbR1xSM08YTIbQX&aws_access_key_id=AKIAJAHZUGNTLVQBYYPA")
 ;;
@@ -63,10 +63,12 @@
 (defn dblist []
   (listdbs))
 
-(def persons (map #(zipmap [:person-name :age :address :phone :email :morf :sports :likes] %) [["raghu" 42 "Iskcon Gokulam Bangalore" "9886615961" "raghu@gmail.com" "male" "cricket" "football"]
-                                                                                ["anand" 42 "Aundh Pune" "9845272298" "anand@gmail.com" "male" "cricket" "tennis"]
-                                                                                ["ramesh" 43 "Basaveshwarnagar Bangalore" "9886615962" "ramesh@gmail.com" "male" "cricket" "tt"]
-                                                                                ["prakash" 42 "Nandini layout Bangalore" "9886615963" "prakash@gmail.com" "male" "cricket" "baseball"]]))
+(defrecord Person [person-name age address phone email morf sports likes])
+(def persons (list (->Person "raghu" 42 "Iskcon Gokulam Bangalore" "9886615961" "raghu@gmail.com" "male" "cricket" "football")
+                   (->Person "anand" 42 "Aundh Pune" "9845272298" "anand@gmail.com" "male" "cricket" "tennis")
+                   (->Person "ramesh" 43 "Basaveshwarnagar Bangalore" "9886615962" "ramesh@gmail.com" "male" "cricket" "tt")
+                   (->Person "prakash" 42 "Nandini layout Bangalore" "9886615963" "prakash@gmail.com" "male" "cricket" "baseball")))
+
 (defn addpersons [persons]
   (let [conn (d/connect uri)]
     (loop [lx persons]
@@ -75,11 +77,12 @@
       (reng/add-person conn (first lx))
       (recur (rest lx))))))
 
-(def sports (map #(zipmap [:sport-name :details] %) [["cricket" "Game of glorious uncertainties"]
-                                                     ["football" "Needs great strenght and skill"]
-                                                     ["tennis" "Game of grace and speed"]
-                                                     ["tabletennis" "Game of grace"]
-                                                     ["badminton" "Game of grace speed and skill"]]))
+(defrecord Sport [sport-name details])
+(def sports (list (->Sport "cricket" "Game of glorious uncertainties")
+                  (->Sport "football" "Needs great strenght and skill")
+                  (->Sport "tennis" "Game of grace and speed")
+                  (->Sport "tabletennis" "Game of grace")
+                  (->Sport "badminton" "Game of grace speed and skill")))
 
 (defn addsports [sports]
   (let [conn (d/connect uri)]
@@ -89,15 +92,14 @@
       (reng/add-sport conn (first lx))
       (recur (rest lx))))))
 
-(def roles (map #(zipmap [:role-name :details] %) [["administrator" "The administrator"]
-                                                     ["player" "The player"]
-                                                     ["organiser" "The organiser"]
-                                                     ["coach" "The coach"]
-                                                     ["scorer" "The scorer"]
-                                                     ["statistician" "The statistician"]
-                                                     ["umpire" "The umpire"]]))
-
-
+(defrecord Role [role-name details])
+(def roles (list (->Role "administrator" "The administrator")
+                 (->Role "player" "The player")
+                 (->Role "organiser" "The organiser")
+                 (->Role "coach" "The coach")
+                 (->Role "scorer" "The scorer")
+                 (->Role "statistician" "The statistician")
+                 (->Role "umpire" "The umpire")))
 
 (defn addroles [roles]
   (let [conn (d/connect uri)]
@@ -107,10 +109,11 @@
       (reng/add-role conn (first lx))
       (recur (rest lx))))))
 
-(def teams (map #(zipmap [:team-name :sport_ref :person_ref] %) [["rcb" "cricket" "raghu"]
-                                                                 ["rcb" "cricket" "prakash"]
-                                                                 ["mi" "cricket" "ramesh"]
-                                                                 ["csk" "cricket" "anand"]]))
+(defrecord Team [team-name sport_ref person_ref] )
+(def teams (list (->Team "rcb" "cricket" "raghu")
+                 (->Team "rcb" "cricket" "prakash")
+                 (->Team "mi" "cricket" "ramesh")
+                 (->Team "csk" "cricket" "anand")))
 
 (defn addteams [teams]
   (let [conn (d/connect uri)]
@@ -120,12 +123,12 @@
       (reng/add-team conn (first lx))
       (recur (rest lx))))))
 
-(def tourneys (map #(zipmap [:tourney-name :sport_ref :person_ref :startdate :enddate :city :address :pin] %)
-                       [["ipl2013" "cricket" "raghu" "" "" "bangalore" "KSCA" "560065"]
-                        ["ipl2015" "cricket" "prakash" "" "" "chennai" "TNCA" "400088"]
-                        ["Under-19" "cricket" "prakash" "" "" "chennai" "TNCA" "400088"]
-                        ["Under-21" "cricket" "prakash" "" "" "chennai" "TNCA" "400088"]
-                        ["Inter School cricket tournament" "cricket" "prakash" "" "" "chennai" "TNCA" "400088"]]))
+(defrecord Tourney [tourney-name sport_ref person_ref startdate enddate city address pin])
+(def tourneys (list (->Tourney "ipl2015" "cricket" "raghu" "" "" "bangalore" "KSCA" "560065")
+                    (->Tourney "Under-19" "cricket" "prakash" "" "" "chennai" "TNCA" "400088")
+                    (->Tourney "Under-21" "cricket" "prakash" "" "" "chennai" "TNCA" "400088")
+                    (->Tourney "Inter School cricket tournament" "cricket" "prakash" "" "" "chennai" "TNCA" "400088")
+                    ))
 
 (defn addtourneys [tourneys]
   (let [conn (d/connect uri)]
@@ -135,11 +138,11 @@
       (reng/add-event conn (first lx))
       (recur (rest lx))))))
 
-(def participants (map #(zipmap [:team_ref :person_ref :role_ref :tourney_ref] %)
-                       [["rcb" "raghu" "player" "ipl2015"]
-                        ["rcb" "prakash" "player" "ipl2015"]
-                        ["mi" "ramesh" "player" "ipl2015"]
-                        ["csk" "anand" "player" "ipl2015"]]))
+(defrecord Participant [team_ref person_ref role_ref tourney_ref])
+(def participants (list (->Participant "rcb" "raghu" "player" "ipl2015")
+                        (->Participant "rcb" "prakash" "player" "ipl2015")
+                        (->Participant "mi" "ramesh" "player" "ipl2015")
+                        (->Participant "csk" "anand" "player" "ipl2015")))
 
 (defn addparticipants [participants]
   (let [conn (d/connect uri)]
@@ -149,11 +152,11 @@
       (reng/add-participant conn (first lx))
       (recur (rest lx))))))
 
-(def matches (map #(zipmap [:match-name :team_ref :tourney_ref] %)
-                       [["quarter-final" "rcb" "ipl2015"]
-                        ["quarter-final""csk" "ipl2015"]
-                        ["semi-final" "csk" "ipl2015"]
-                        ["semi-final" "rcb" "ipl2015"]]))
+(defrecord Match [match-name team_ref tourney_ref])
+(def matches (list (->Match "quarter-final" "rcb" "ipl2015")
+                   (->Match "quarter-final""csk" "ipl2015")
+                   (->Match "semi-final" "csk" "ipl2015")
+                   (->Match "semi-final" "rcb" "ipl2015")))
 
 (defn addmatches [matches]
   (let [conn (d/connect uri)]
@@ -163,11 +166,11 @@
       (reng/add-match conn (first lx))
       (recur (rest lx))))))
 
-(def scores (map #(zipmap [:match_ref :log :comments] %)
-                       [["quarter-final" "12-1" "Great batting "]
-                        ["quarter-final" "32-1" "Great batting "]
-                        ["semi-final" "92-9" "Superb bowling "]
-                        ["semi-final" "221-1" "Fantastic total "]]))
+(defrecord Score [match_ref log comments])
+(def scores (list (->Score "quarter-final" "12-1" "Great batting ")
+                  (->Score "quarter-final" "32-1" "Great batting ")
+                  (->Score "semi-final" "92-9" "Superb bowling ")
+                  (->Score "semi-final" "221-1" "Fantastic total ")))
 
 (defn addscores [scores]
   (let [conn (d/connect uri)]
@@ -201,8 +204,8 @@
                      (timbre/info (first lx))
                    (recur (rest lx)))))
     )
-    (def results (map #(zipmap [:eid :tourney-name :organiser_name :address :pin :sport :city] %) (reng/find-tourneys conn)))
-    (into [] results))
+    (def results (map #(zipmap [:eid :tourney-name :organiser_name :address :pin :sport :city] %) (reng/find-tourneys conn))))
+    (into [] results)
   )
 
 (defn get_tourneys_by_sport [sport_name]
@@ -250,6 +253,7 @@
       (get_image_urls (:images (json/read-str body :key-fn keyword))))
   )
 )
+;(defn get_images [])
 (comment)
 (def todays_images (concat (download_images "football") (download_images "cricket") (download_images "tennis") (download_images "athletics") (download_images "badminton")))
 
@@ -258,6 +262,7 @@
 (defn get_images []
 (json/write-str todays_images)
 )
+
 
 (defn fetch_images [query_chan]
   (go (timbre/info "sleeping...")

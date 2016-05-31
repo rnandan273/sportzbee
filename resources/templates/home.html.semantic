@@ -9,6 +9,9 @@
       {% style "/css/semantic.min.css" %}
     </head>
   <body style="background-color:#E3F2FD">
+    <div id="reactnavbar"></div>
+    <div id="map-canvas" />
+    <div id="navbar"></div>
     <div id="app">
       <div class="container">
           <p>Welcome the online social and digital sports platform for sports enthusiasts</p>

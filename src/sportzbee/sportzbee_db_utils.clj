@@ -253,8 +253,8 @@
       (get_image_urls (:images (json/read-str body :key-fn keyword))))
   )
 )
-;(defn get_images [])
-(comment)
+(defn get_images [])
+(comment
 (def todays_images (concat (download_images "football") (download_images "cricket") (download_images "tennis") (download_images "athletics") (download_images "badminton")))
 
 (timbre/info todays_images)
@@ -262,7 +262,7 @@
 (defn get_images []
 (json/write-str todays_images)
 )
-
+)
 
 (defn fetch_images [query_chan]
   (go (timbre/info "sleeping...")

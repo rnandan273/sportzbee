@@ -122,8 +122,6 @@
 
 (def googlemapkey "AIzaSyDUexZHH88EIeKZSS6U-efg0KDMQCZoH3w")
 
-(def jquery (js* "$"))
-
 (def read-json (t/reader :json))
 
 (def write-json (t/writer :json))
@@ -233,7 +231,7 @@
 )
 
 
-(defn reactnavbarold []
+(defn reactnavbar []
   (fn []
 
     [:div {:class (@app-state :flag)}
@@ -247,47 +245,19 @@
     )
   )
 
-(defn reactnavbar []
-  (fn []
-
-    [:div {:class "ui sidebar vertical menu"}
-    [:a {:class "item" :href "#/"} "Home"]
-    [:a {:class "item" :href "#/about"}  "About"]
-    [:a {:class "item" :href "#/login"}  "Login"]
-    [:a {:class "item" :href "#/register"}  "Register"]
-    [:a {:class "item" :href "syncfb"}  "Facebook login"]
-     ]
-    )
-  )
-
-(defn initui []
-  (. (jquery ".ui.accordion") (accordion)))
-
-(defn clkhandler []
-  (. (jquery ".ui.sidebar") (sidebar "toggle"))
-  (. (jquery ".ui.accordion") (accordion)))
-
 (defn home-page []
-  [:div {:style {:background-color "E3F2FD"}}
-  [:div {:class "ui left sidebar vertical menu"}
-    [:a {:class "item" :href "#/"} "Home"]
-    [:a {:class "item" :href "#/about"}  "About"]
-    [:a {:class "item" :href "#/login"}  "Login"]
-    [:a {:class "item" :href "#/register"}  "Register"]
-    [:a {:class "item" :href "syncfb"}  "Facebook login"]
-     ]
   [:div {:class "pusher"}
-   [:h1 {:on-click #(clkhandler)} (str "Welcome " ((@app_state :person) :user_name))]
+   [:div {:class "ui basic segment"}
+   [:h1 {:on-click #(swap! app-state assoc-in [:flag] "ui left sidebar.toggle")} (str "Welcome " ((@app_state :person) :user_name))]
    [:h3 "All Events"]
    [:div {:class "ui stackable two column grid"}
     [:div {:class "column"}
      [:div {:class "ui accordion"}
-      [:div {:class "title"} [:i {:class "dropdown icon"}] "Title 1"][:div {:class "content"} [:br][map-component][:br]]
+      [:div {:class "title"} [:i {:class "dropdown icon"}] "Title 1"][:div {:class "content"} "Content1"]
       [:div {:class "title"} [:i {:class "dropdown icon"}] "Title 2"][:div {:class "content"} "Content2"]
       ]]
     [:div {:class "column"} [:br][map-component][:br]]
     ]]])
-
 
 (defn about-page []
   [:div.container
@@ -689,6 +659,65 @@
   (session/put! :page :register)
   (session/put! :current-page "register"))
 
+
+
+(comment
+(def pages_old
+  {:home #'home-page
+   :register #'register-page
+   :addevent #'register-event
+   :myevents #'my-events
+   :details #'details-page
+   :login #'login-page
+   :fblogin #'fblogin-page
+   :about #'about-page})
+
+(defn page []
+  [(pages (session/get :page))])
+
+;; -------------------------
+;; Routes
+(secretary/set-config! :prefix "#")
+
+(secretary/defroute "/" []
+  (session/put! :page :home)
+  (session/put! :current-page "home")
+  )
+
+(secretary/defroute "/about" []
+  (session/put! :page :about)
+  (session/put! :current-page "about")
+  )
+
+(secretary/defroute "/register" []
+  (session/put! :page :register)
+  (session/put! :current-page "register"))
+
+(secretary/defroute "/addevent" []
+  (session/put! :page :addevent)
+  (session/put! :current-page "addevent"))
+
+(secretary/defroute "/myevents" []
+  (session/put! :page :myevents)
+  (session/put! :current-page "myevents"))
+
+(secretary/defroute "/details" []
+  (session/put! :page :details)
+  (session/put! :current-page "details"))
+
+(secretary/defroute "/chat" []
+  (session/put! :page :chat)
+  (session/put! :current-page "chat"))
+
+(secretary/defroute "/login" []
+  (session/put! :page :login)
+  (session/put! :current-page "login"))
+
+(secretary/defroute "/logout" []
+  (session/put! :page :logout)
+  (session/put! :current-page "logout"))
+
+)
 (defn on_logout []
   (cookies/remove! "token")
   (do
@@ -790,14 +819,20 @@
 
 
 (defn mount-components []
-  (reagent/render [current-page] (.getElementById js/document "app")))
+  ;;;;;(reagent/render [#'navbar] (.getElementById js/document "navbar"))
+  (reagent/render [#'reactnavbar] (.getElementById js/document "reactnavbar"))
+  ;;;;;;(reagent/render [#'page] (.getElementById js/document "app"))
+  ;;;;;;(reagent/render [#'services] (.getElementById js/document "services"))
+  (reagent/render [current-page] (.getElementById js/document "app"))
+  ;;(reagent/render [home] (.getElementById js/document "app"))
+  ;(reagent/render [#'footer] (.getElementById js/document "footer"))
+  )
 
 (defn init! []
   (fetch-docs!)
   (hook-browser-navigation!)
   (mount-components)
   (fetch_getty_images "/getty_images")
-  (initui)
 )
 
 

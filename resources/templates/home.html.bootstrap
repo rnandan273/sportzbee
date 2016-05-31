@@ -4,11 +4,22 @@
       <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>Welcome to sportzbee</title>
-      {% script "/js/jquery.min.js" %}
-      {% script "/js/semantic.min.js" %}
-      {% style "/css/semantic.min.css" %}
+      {% style "/css/bootstrap.min.css" %}
+    {% style "/css/bootstrap-theme.min.css" %}
+    {% style "/css/ripples.min.css" %}
+    {% style "/css/material.min.css" %}
+    {% style "/css/material-fullpalette.min.css" %}
+
+
+    {% script "/js/jquery.min.js" %}
+    {% script "/bootstrap-3.3.5/js/bootstrap.min.js" %}
+    {% script "/js/material.min.js" %}
+    {% script "/js/ripples.min.js" %}
     </head>
   <body style="background-color:#E3F2FD">
+    <div id="reactnavbar"></div>
+    <div id="map-canvas" />
+    <div id="navbar"></div>
     <div id="app">
       <div class="container">
           <p>Welcome the online social and digital sports platform for sports enthusiasts</p>

@@ -7,7 +7,6 @@
             [goog.history.EventType :as EventType]
             [hickory.core :as hickory]
             [cljs.core.async :as async :refer [chan close!]]
-            [cljsjs.react-bootstrap :as react-bootstrap]
             [markdown.core :refer [md->html]]
             [clojure.walk :as walk]
             [cognitect.transit :as t]
@@ -17,6 +16,7 @@
     [cljs.core.async.macros :refer [go alt!]]))
 (def app-state (reagent/atom
                 {:app-about-page-message "This about page message"
+                 :flag "ui left hide sidebar"
                               :background-color "black"
                               :person {:user_name "Guest"
                                        :bank ""
@@ -48,8 +48,7 @@
                                             {:link-ref "#/" :evt-key 1 :name-ref "Home"}
                                             {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
                                             {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
-                                            {:link-ref "#/register" :evt-key 4 :name-ref "Register"}
-                                            {:link-ref "/syncfb" :evt-key 5 :name-ref "LoginFB"})
+                                            {:link-ref "/syncfb" :evt-key 4 :name-ref "LoginFB"})
                                    :items_support (list
                                             {:link-ref "#/login" :evt-key 1 :name-ref "Login"}
                                             {:link-ref "#/register" :evt-key 2 :name-ref "Register"}
@@ -121,36 +120,9 @@
                               }))
 
 
-(def Text (reagent/adapt-react-class js/ReactBootstrap.Text))
-(def Grid (reagent/adapt-react-class js/ReactBootstrap.Grid))
-(def Row (reagent/adapt-react-class js/ReactBootstrap.Row))
-(def Col (reagent/adapt-react-class js/ReactBootstrap.Col))
-(def Label (reagent/adapt-react-class js/ReactBootstrap.Label))
-(def ListGroup (reagent/adapt-react-class js/ReactBootstrap.ListGroup))
-(def ListGroupItem (reagent/adapt-react-class js/ReactBootstrap.ListGroupItem))
-(def Button (reagent/adapt-react-class js/ReactBootstrap.Button))
-(def Label (reagent/adapt-react-class js/ReactBootstrap.Label))
-(def Jumbotron (reagent/adapt-react-class js/ReactBootstrap.Jumbotron))
-(def Accordion (reagent/adapt-react-class js/ReactBootstrap.Accordion))
-(def Panel (reagent/adapt-react-class js/ReactBootstrap.Panel))
-(def Modal (reagent/adapt-react-class js/ReactBootstrap.Modal))
-(def Navbar (reagent/adapt-react-class js/ReactBootstrap.Navbar))
-(def Nav (reagent/adapt-react-class js/ReactBootstrap.Nav))
-(def NavItem (reagent/adapt-react-class js/ReactBootstrap.NavItem))
-(def DropdownButton (reagent/adapt-react-class js/ReactBootstrap.DropdownButton))
-(def MenuItem (reagent/adapt-react-class js/ReactBootstrap.MenuItem))
-(def Input (reagent/adapt-react-class js/ReactBootstrap.Input))
-(def ButtonInput (reagent/adapt-react-class js/ReactBootstrap.ButtonInput))
-(def Thumbnail (reagent/adapt-react-class js/ReactBootstrap.Thumbnail))
-(def CollapsibleNav (reagent/adapt-react-class js/ReactBootstrap.CollapsibleNav))
-(def Carousel (reagent/adapt-react-class js/ReactBootstrap.Carousel))
-(def CarouselItem (reagent/adapt-react-class js/ReactBootstrap.CarouselItem))
-(def Tabs (reagent/adapt-react-class js/ReactBootstrap.Tabs))
-(def Tab (reagent/adapt-react-class js/ReactBootstrap.Tab))
-(def Pager (reagent/adapt-react-class js/ReactBootstrap.Pager))
-(def PageItem (reagent/adapt-react-class js/ReactBootstrap.PageItem))
-
 (def googlemapkey "AIzaSyDUexZHH88EIeKZSS6U-efg0KDMQCZoH3w")
+
+(def jquery (js* "$"))
 
 (def read-json (t/reader :json))
 
@@ -260,7 +232,143 @@
    }
 )
 
+
+(defn reactnavbarold []
+  (fn []
+
+    [:div {:class (@app-state :flag)}
+     [:div {:class "ui stackable horizontal container menu"}
+    [:a {:class "item" :on-click #(swap! app-state assoc-in [:flag] "ui left sidebar")} "Home"]
+    [:a {:class "item" :href "#/about"}  "About"]
+    [:a {:class "item" :href "#/login"}  "Login"]
+    [:a {:class "item" :href "#/register"}  "Register"]
+    [:a {:class "item" :href "syncfb"}  "Facebook login"]
+     ]]
+    )
+  )
+
 (defn reactnavbar []
+  (fn []
+
+    [:div {:class "ui sidebar vertical menu"}
+    [:a {:class "item" :href "#/"} "Home"]
+    [:a {:class "item" :href "#/about"}  "About"]
+    [:a {:class "item" :href "#/login"}  "Login"]
+    [:a {:class "item" :href "#/register"}  "Register"]
+    [:a {:class "item" :href "syncfb"}  "Facebook login"]
+     ]
+    )
+  )
+
+(defn initui []
+  (. (jquery ".ui.accordion") (accordion)))
+
+(defn clkhandler []
+  (. (jquery ".ui.sidebar") (sidebar "toggle"))
+  (. (jquery ".ui.accordion") (accordion)))
+
+(defn home-page []
+  [:div {:style {:background-color "E3F2FD"}}
+  [:div {:class "ui left sidebar vertical menu"}
+    [:a {:class "item" :href "#/"} "Home"]
+    [:a {:class "item" :href "#/about"}  "About"]
+    [:a {:class "item" :href "#/login"}  "Login"]
+    [:a {:class "item" :href "#/register"}  "Register"]
+    [:a {:class "item" :href "syncfb"}  "Facebook login"]
+     ]
+  [:div {:class "pusher"}
+   [:h1 {:on-click #(clkhandler)} (str "Welcome " ((@app_state :person) :user_name))]
+   [:h3 "All Events"]
+   [:div {:class "ui stackable two column grid"}
+    [:div {:class "column"}
+     [:div {:class "ui accordion"}
+      [:div {:class "title"} [:i {:class "dropdown icon"}] "Title 1"][:div {:class "content"} [:br][map-component][:br]]
+      [:div {:class "title"} [:i {:class "dropdown icon"}] "Title 2"][:div {:class "content"} "Content2"]
+      ]]
+    [:div {:class "column"} [:br][map-component][:br]]
+    ]]])
+
+
+(defn about-page []
+  [:div.container
+   [:div.row
+    [:div.col-md-12
+     "this is the story of sportzbee... work in progress"]]])
+
+(defn user-login-click [{:keys [user-name passwd]} doc]
+  (log (str "User Login destructuring" user-name passwd))
+  (comment
+  (go
+    (read-auth-response (<! (do-http-get ((:usertoken url_list) user-name passwd)))))
+  ))
+
+(defn login-page []
+  (let [login_doc (reagent/atom (@app-state :person))]
+   (fn []
+     [:div {:class "ui stackable four column grid"}
+      [:div {:class "column"}]
+      [:div {:class "column"}
+       [:form {:class "ui form"}
+        [:div {:class "field"}
+          [:div {:class "ui left icon input"}
+              [:i {:class "user icon"}]
+          [:input {:type "text" :name "user-name" :placeholder "User Name"
+                   :onchange #(swap! login_doc assoc-in [:user-name] (-> % .-target .-value))}]]]
+        [:div {:class "field"}
+          [:div {:class "ui left icon input"}
+              [:i {:class "email icon"}]
+          [:input {:type "email" :name "email" :placeholder "Email"
+                   :onchange #(swap! login_doc assoc-in [:email] (-> % .-target .-value))}]]]
+        [:div {:class "field"}
+          [:div {:class "ui left icon input"}
+              [:i {:class "lock icon"}]
+          [:input {:type "password" :name "password" :placeholder "Password"
+                   :onchange #(swap! login_doc assoc-in [:password] (-> % .-target .-value))}]]]
+         [:div {:class "two column row"}
+          [:div {:class "column"}]
+          [:div {:class "column"}[:button {:class "ui button" :type "submit" :onclick #(user-login-click @login_doc)} "Login"]
+       ]]]]
+      [:div {:class "column"}]]
+     )))
+
+(defn register-page [])
+
+(defn login-page_old []
+  (let [login_doc (reagent/atom (@app-state :person) :many {:options :foo})]
+    (fn []
+      [:form  {:className "form-horizontal"}
+       [Grid
+        [Row
+         [Col {:mdOffset 1 :xsOffset 1 :md 11 :xs 11} [:h2 "Welcome , Login"]
+           [Col {:md 9 :xs 9}
+            [Row
+              [Input {:labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
+                      :type "text" :bsSize "small" :label "Username" :placeholder "Enter text"
+                    :onChange #(swap! login_doc assoc-in [:user-name] (-> % .-target .-value))}]]
+            [Row
+               [Input {:labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
+                      :type "password" :bsSize "small" :label "Password" :placeholder "Enter password"
+                      :onChange #(swap! login_doc assoc-in [:passwd] (-> % .-target .-value))}]]
+            [Row
+               [Input {:labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
+                      :type "email" :bsSize "small" :label "Email Address" :placeholder "Enter email"
+                       :onChange #(swap! login_doc assoc-in [:passwd] (-> % .-target .-value))}]]
+
+            [Row [Col {:md 1 :xs 1}
+              [ButtonInput { :class "btn-material-light-blue-800" :type "reset" :bsSize "small" :bsStyle "primary" :value "Reset"}]
+              ]
+             [Col {:mdOffset 2 :xsOffset 2 :md 1 :xs 1}
+              [ButtonInput {:class "btn-material-light-blue-800" :type "submit" :bsSize "small"  :bsStyle "primary" :value "Login" :onClick #(user-login-click @login_doc)}]
+              ]
+             ]
+          ]
+
+         [Col {:mdOffset 1 :xsOffset 1} [:h2 "New User"]]
+            [Button {:class "btn-material-light-blue-800" :bsSize "small" :bsStyle "primary" :href "#/register"} "Register"]
+         ]]]])))
+
+(comment
+(defn reactnavbar_old []
   (fn []
     [Navbar {:class "navbar-material-light-blue-800" :fixedTop true :brand "Sportzbee" :bsStyle "primary" :bsSize "large" :toggleNavKey 0}
      [CollapsibleNav {:eventKey 0}
@@ -270,17 +378,13 @@
           (let [{:keys [evt-key link-ref name-ref]} x]
             [NavItem {:class "navitem-material-light-blue-800" :eventKey evt-key :href link-ref} name-ref]))]]]))
 
-(defn about-page []
-  [:div.container
-   [:div.row
-    [:div.col-md-12
-     "this is the story of sportzbee... work in progress"]]])
+
 
 (defn get_random_image_url []
   (:uri (get (@app_state :getty_images) (get_random_image_index)))
 )
 
-(defn home-page []
+(defn home-page_old []
   (fn []
     [:div.container
      [:div [Carousel {:controls false :indicators false}
@@ -292,19 +396,12 @@
               [:h3 {:style {:font-weight "bold" :color "#1D71B0"}} headline]
               [:p [Button {:class "btn-material-light-blue-800" :bsSize "xsmall"
                            :bsStyle "primary" :href link-ref} name-ref]]]]))]]
-     [:div [Grid {:fluid false}
-            [Col {:xs 9 :md 6} [search-events-details]
-             [Pager {:disabled false}
-                [PageItem {:previous true :href "#"} "Previous"]
-                [PageItem {:next true :href "#"}"Next"]
-              ]]
-            [Col {:xs 9 :md 6}[:br]
-                 [:br]
-                 [map-component]
-                 [:br]
-                 [:br]]
-            ]]
 
+     [:br]
+     [:br]
+     [map-component]
+     [:br]
+     [:br]
 
      [:div
       [Grid {:fluid true}
@@ -382,8 +479,8 @@
       [:form  {:className "form-horizontal"}
        [Grid
         [Row
-         [Col {:mdOffset 3 :xsOffset 2 :md 9 :xs 16} [:h2 "Welcome , Login"]
-           [Col {:md 10 :xs 14}
+         [Col {:mdOffset 1 :xsOffset 1 :md 11 :xs 11} [:h2 "Welcome , Login"]
+           [Col {:md 9 :xs 9}
             [Row
               [Input {:labelClassName "col-xs-2" :wrapperClassName "col-xs-6"
                       :type "text" :bsSize "small" :label "Username" :placeholder "Enter text"
@@ -397,16 +494,18 @@
                       :type "email" :bsSize "small" :label "Email Address" :placeholder "Enter email"
                        :onChange #(swap! login_doc assoc-in [:passwd] (-> % .-target .-value))}]]
 
-            [Row
-             [Col {:md 3 :xs 6}
+            [Row [Col {:md 1 :xs 1}
               [ButtonInput { :class "btn-material-light-blue-800" :type "reset" :bsSize "small" :bsStyle "primary" :value "Reset"}]
               ]
-             [Col {:md 3 :xs 6}
+             [Col {:mdOffset 2 :xsOffset 2 :md 1 :xs 1}
               [ButtonInput {:class "btn-material-light-blue-800" :type "submit" :bsSize "small"  :bsStyle "primary" :value "Login" :onClick #(user-login-click @login_doc)}]
-              ]]
+              ]
+             ]
           ]
 
-           ]]]])))
+         [Col {:mdOffset 1 :xsOffset 1} [:h2 "New User"]]
+            [Button {:class "btn-material-light-blue-800" :bsSize "small" :bsStyle "primary" :href "#/register"} "Register"]
+         ]]]])))
 
 (def url_list {:usertoken1
                  (fn [username password]
@@ -421,8 +520,10 @@
 
 (defn user-login-click [{:keys [user-name passwd]} doc]
   (log (str "User Login destructuring" user-name passwd))
+  (comment
   (go
-    (read-auth-response (<! (do-http-get ((:usertoken url_list) user-name passwd))))))
+    (read-auth-response (<! (do-http-get ((:usertoken url_list) user-name passwd)))))
+  ))
 
 (defn user-fb-login-click []
 
@@ -556,16 +657,12 @@
 
 (defn fblogin-page []
   (@app-state :fbpage))
-
+)
 (def pages
   {:home #'home-page
+   :about #'about-page
    :register #'register-page
-   :addevent #'register-event
-   :myevents #'my-events
-   :details #'details-page
-   :login #'login-page
-   :fblogin #'fblogin-page
-   :about #'about-page})
+   :login #'login-page})
 
 (defn page []
   [(pages (session/get :page))])
@@ -584,33 +681,13 @@
   (session/put! :current-page "about")
   )
 
-(secretary/defroute "/register" []
-  (session/put! :page :register)
-  (session/put! :current-page "register"))
-
-(secretary/defroute "/addevent" []
-  (session/put! :page :addevent)
-  (session/put! :current-page "addevent"))
-
-(secretary/defroute "/myevents" []
-  (session/put! :page :myevents)
-  (session/put! :current-page "myevents"))
-
-(secretary/defroute "/details" []
-  (session/put! :page :details)
-  (session/put! :current-page "details"))
-
-(secretary/defroute "/chat" []
-  (session/put! :page :chat)
-  (session/put! :current-page "chat"))
-
 (secretary/defroute "/login" []
   (session/put! :page :login)
   (session/put! :current-page "login"))
 
-(secretary/defroute "/logout" []
-  (session/put! :page :logout)
-  (session/put! :current-page "logout"))
+(secretary/defroute "/register" []
+  (session/put! :page :register)
+  (session/put! :current-page "register"))
 
 (defn on_logout []
   (cookies/remove! "token")
@@ -620,8 +697,7 @@
          (list {:link-ref "#/" :evt-key 1 :name-ref "Home"}
                {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
                {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
-               {:link-ref "#/register" :evt-key 4 :name-ref "Register"}
-               {:link-ref "/syncfb" :evt-key 5 :name-ref "LoginFB"})))
+               {:link-ref "/syncfb" :evt-key 3 :name-ref "LoginFB"})))
   )
 
 (defn redirect_handle_page_load[]
@@ -640,8 +716,7 @@
          (list {:link-ref "#/" :evt-key 1 :name-ref "Home"}
                {:link-ref "#/about" :evt-key 2 :name-ref "About us"}
                {:link-ref "#/login" :evt-key 3 :name-ref "Login"}
-               {:link-ref "#/register" :evt-key 4 :name-ref "Register"}
-               {:link-ref "/syncfb" :evt-key 5 :name-ref "LoginFB"}))))
+               {:link-ref "/syncfb" :evt-key 4 :name-ref "LoginFB"}))))
 
 )
 
@@ -715,20 +790,14 @@
 
 
 (defn mount-components []
-  ;;;;;(reagent/render [#'navbar] (.getElementById js/document "navbar"))
-  (reagent/render [#'reactnavbar] (.getElementById js/document "reactnavbar"))
-  ;;;;;;(reagent/render [#'page] (.getElementById js/document "app"))
-  ;;;;;;(reagent/render [#'services] (.getElementById js/document "services"))
-  (reagent/render [current-page] (.getElementById js/document "app"))
-  ;;(reagent/render [home] (.getElementById js/document "app"))
-  (reagent/render [#'footer] (.getElementById js/document "footer"))
-  )
+  (reagent/render [current-page] (.getElementById js/document "app")))
 
 (defn init! []
   (fetch-docs!)
   (hook-browser-navigation!)
   (mount-components)
   (fetch_getty_images "/getty_images")
+  (initui)
 )
 
 
